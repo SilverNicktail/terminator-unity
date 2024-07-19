@@ -1,38 +1,84 @@
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/4f176f9d-6332-47b3-a4d7-317ed8d6b38b)
+# Terminator Unity
 
-# What is Daggerfall Unity?
+Terminator Unity is an attempt to create a Unity wrapper around the game Terminator: Future Shock, that will allow the
+original game to run cleanly on modern systems, with many quality-of-life upgrades. It is based directly on the
+extraordinary work done by the Daggerfall Unity team, who already achieved this for The Elder Scrolls: Daggerfall.
 
-Daggerfall Unity is an open source recreation of Daggerfall in the Unity engine created by [Daggerfall Workshop](http://www.dfworkshop.net).
+Daggerfall Unity is an open source recreation of Daggerfall in the Unity engine created by
+[Daggerfall Workshop](http://www.dfworkshop.net).
 
-Experience the adventure and intrigue of Daggerfall with all of its original charm along with hundreds of fixes, quality of life enhancements, and extensive mod support.
+## Future What?
 
-## Classic Daggerfall Plus
+A sadly overlooked achievement in gaming, Terminator: Future Shock was released in 1995 by Bethesda Softworks. A truly
+revolutionary game, it was the first mouse-look FPS game released (no, that wasn't Quake!). As well as creating the 
+basic control scheme of all future first-person games, it also featured 3D free-roaming levels, 3D enemies,
+the ability to enter and explore buildings around the map at will, and driving/flying vehicle sections. 
 
-+ Cross-platform without emulation (Windows/Linux/Mac)
-+ Retro graphics are boosted by modern engine and lighting
-+ High resolution widescreen with classic style
-+ Optionally play in retro mode 320x200 or 640x400 with VGA palettes
-+ Optionally overhaul the graphics and gameplay with mods
-+ Huge draw distances even without mods
-+ Smooth first-person controls
-+ Quality of life enhancements
-+ Extensive mod support with an active creator community
-+ Translation support via community mods
+None of that may sound particularly impressive today, but when you consider that Future Shock came out only one year
+after Doom II, and one year __before__ both Duke Nukem 3D and Quake, it's far more so.
 
-# Get Daggerfall Unity
+It was also just a pretty damn good FPS, if you ask me. Future Shock was moody, atmospheric, lonely, occasionally 
+terrifying and mostly faithful to the world created by the films. For myself, Future Shock was a formative experience, 
+directly contributing to a lifelong love of gaming. Unforunately, it sits forgotten in the annals of the medium, with
+no digital release (owing to its status as a movie-licensed game), system requirements too archaic for modern machines,
+and visuals/AI that - let's be honest - hold up as well as a chocolate teapot. I hope to help resolve some of these
+issues and make the game more accessible to modern audiences.
 
-Daggerfall Unity requires a free copy of DOS Daggerfall to run. This provides all necessary game assets such as textures, 3D models, and sound effects.
+## What about SkyNET?
 
-You can get a free copy of DOS Daggerfall from [Steam](https://store.steampowered.com/app/1812390/The_Elder_Scrolls_II_Daggerfall/) and a free copy of Daggerfall Unity from the [Releases](https://github.com/Interkarma/daggerfall-unity/releases) page. Then simply unzip the latest version of Daggerfall Unity to its own folder and point it to the DOS version. Daggerfall Unity will take care of everything else.
+Future Shock got a standalone expansion pack, SkyNET, in 1996. If possible, I would like to support that release as
+well, but for the initial work I will focus on Future Shock (while leaving space to accommodate SkyNET where possible).
 
-Here are a couple of links with more detailed steps to help you get started using either Steam or a cross-platform process.
+## Goals
 
-+ [Using Steam Release of Daggerfall with Daggerfall Unity](https://github.com/Interkarma/daggerfall-unity/wiki/Using-Steam-Release-of-Daggerfall-with-Daggerfall-Unity)
-+ [Installing Daggerfall Unity Cross Platform](https://github.com/Interkarma/daggerfall-unity/wiki/Installing-Daggerfall-Unity-Cross-Platform)
+The primary goals of the project are:
 
-# System Requirements
+* Seamless gameplay on modern Windows and Linux systems (I do not have Mac to test)
+* Widescreen support
+* Controller support
+* Improved resolution
+* Improved enemy AI/pathfinding (the original's is pretty rubbish, let's be honest)
+* Accessibility enhancements where appropriate
+* Translation support
+* Integration with RetroAchievements or similar
+* Some form of cloud save integration
 
-Daggerfall Unity has the following system requirements. Please note that optional mods may substantially increase system requirements or cause game to become less stable.
+There are also several prominent bugs I would like to patch:
+
+* Enemy AI & animations are deactivated at a range slightly less than the draw distance, allowing them to be killed and
+freeze mid-explosion.
+* Some level edges have incorrectly placed invisible walls that allow the player to get permanently stuck.
+* (If SkyNET is integrated) The "Twisted Ankle" bug, where sliding down even small slopes can result in massive health
+loss when reaching the end.
+* (If SkyNET is integrated) Game-breaking bug where a mission-critical target cannot be killed if running Future Shock
+in SkyNET's enhanced mode.
+
+## Development Notes
+
+Linked here are some development notes from my initial work on the project. These will be uplifted into a wiki in
+future.
+
+* [File Types](./Docs/FILETYPES.md) - The files in the `GAMEDATA` folder and their technical specs
+(where they differ from Daggerfall)
+
+## Installation (TBC)
+
+Terminator Unity requires a legal copy of Terminator: Future Shock to run. This provides all necessary game assets such 
+as textures, 3D models, and sound effects. **Terminator Unity does not distribute any copyrighted material.** Unlike
+Daggerfall, Future Shock was never made available as freeware, and because of its movie licensing it will likely never
+be released again, so you will have to source an original copy of the game.
+
+There's nothing I can do about this. Do not try to circumnavigate this restriction. Any issues or discussions created
+asking for a copy of the game will be deleted and the user banned.
+
+Don't worry, no need to run DOSBox and manually install everything! The Future Shock disc contains the full
+installation data in an uncompressed form. Simply copy the `/SHOCK/GAMEDATA/` folder to your hard drive and point
+Terminator Unity to it.
+
+(The original installation process does not copy video files to the hard drive, even when "full installation" is
+selected, so Terminator Unity will not work against copies already installed via DOSBox.)
+
+## Requirements
 
 ### Minimum
 * Operating system: Windows, Linux, MacOS
@@ -45,64 +91,3 @@ Daggerfall Unity has the following system requirements. Please note that optiona
 * Processor: Intel i5 (Skylake) equivalent
 * Graphics: GTX 660 with 2GB video memory and up-to-date drivers
 * Memory: 4GB system RAM
-
-# Featured Mods
-
-Daggerfall Unity has an active mod community with hundreds of incredible mods. It's impossible to feature them all, but here's a sampling of a few popular mods that represent a variety of mods the community has created. They range from graphical overhauls, to new quests, new guilds, adding new world areas, and changing game formulas and other behaviours.
-
-## DREAM
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/6a424f3c-f7f1-4def-82e9-98b6486dfc21)
-
-The Daggerfall Remaster Enchanted Art Mod (DREAM) upgrades game assets including sound, music, videos & all graphics found in the game. It goes beyond a restoration and additionally fixes the old quirks, bugs and increases variety/fidelity everywhere possible.
-
-[Link to DREAM on Nexus](https://www.nexusmods.com/daggerfallunity/mods/5)
-
-## Quest Pack 1
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/43688bd8-c3b0-42b5-bb64-066d6867ff66)
-
-This quest pack offers 195 original new quests for Daggerfall Unity, mostly for the game's guilds.
-
-[Link to Quest Pack 1 on Nexus](https://www.nexusmods.com/daggerfallunity/mods/2)
-
-## Archaeologists
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/282aa3a9-1662-49d9-9319-a9358775ea33)
-
-Enhance Daggerfall Unity gameplay by making language skills more viable and adding a new guild to the game, called "The Archaeologists Guild". Their mission is to delve into the history of Tamriel and they're interested in all creatures and races who have lived or still live there. Joining gives access to locator devices to aid in dungeon delving.
-
-[Link to Archaeologists on Nexus](https://www.nexusmods.com/daggerfallunity/mods/14)
-
-## World of Daggerfall Project
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/c3909d99-9ce4-4c41-8aaf-ee7dce49a6d7)
-
-From the ashes of Daggerfall's past, experience the world of Daggerfall as originally envisioned. With glorious mountain tops that reach for the heavens, and countless new locations to explore.
-
-[Link to World of Daggerfall Project on Nexus](https://www.nexusmods.com/daggerfallunity/mods/249)
-
-## Finding My Religion
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/995ae53d-eb99-451f-942c-931dd31dc85c)
-
-Finding My Religion is a multi-release visual and gameplay overhaul of Daggerfall's religions. The current release is "Detailed Temples", which decorates and redesigns the temples' according to the worshipped deity's sphere of influence. Julianos boasts a bigger library than others, Kynareth has an indoor garden, Mara has a birthing room and more. Each temple have been expanded downwards,  with priests' quarters and additional rooms for all service members. They also feature a crypt where people of importance have been buried.
-
-[Link to Finding My Religion on Nexus](https://www.nexusmods.com/daggerfallunity/mods/344)
-
-## Physical Combat And Armor Overhaul
-
-![image](https://github.com/Interkarma/daggerfall-unity/assets/10426244/35bc2fb2-5b3d-401d-b3cb-806a59241014)
-
-Instead of increasing chance to avoid an attack completely, armor now reduces the damage you take, based on the material as well as the type of attack. Skills now determine most of your chance to avoid attacks, including many more features.
-
-[Link to Physical Combat And Armor Overhaul on Nexus](https://www.nexusmods.com/daggerfallunity/mods/76)
-
-## Links
-
-+ [Daggerfall Unity Nexus](https://www.nexusmods.com/daggerfallunity) - *Discover more mods for Daggerfall Unity*
-+ [Lysandus' Tomb Discord](https://discord.gg/rn95kxPGpg) - *Join an active growing community*
-+ [Daggerfall Workshop](http://www.dfworkshop.net/) - *Follow the development of Daggerfall Unity*
-+ [Workshop Forums](http://forums.dfworkshop.net/) - *Join the forum community*
-+ [Reddit](https://www.reddit.com/r/daggerfallunity) - *Join the Daggerfall Unity subreddit*
-+ [Twitter](https://twitter.com/gav_clayton) - *Follow lead developer on Twitter for more news*
