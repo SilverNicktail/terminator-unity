@@ -25,6 +25,7 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Items;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
+using TerminatorUnity.Validation;
 
 namespace DaggerfallWorkshop
 {
@@ -68,7 +69,7 @@ namespace DaggerfallWorkshop
         #region Public Fields
 
         // General
-        public string Arena2Path;
+        public string Arena2Path; // Need to manage access to this better
         public int ModelImporter_ModelID = 456;
         public string BlockImporter_BlockName = "MAGEAA01.RMB";
         public string CityImporter_CityName = "Daggerfall/Daggerfall";
@@ -255,7 +256,7 @@ namespace DaggerfallWorkshop
         {
             instance = null;
             SetupSingleton();
-            SetupArena2Path();
+            SetupGameAssetPath();
             SetupContentReaders();
         }
 
@@ -270,7 +271,7 @@ namespace DaggerfallWorkshop
         {
 #if UNITY_EDITOR
             // Check ready every update in editor as code changes can de-instantiate local objects
-            if (!isReady) SetupArena2Path();
+            if (!isReady) SetupGameAssetPath();
             if (reader == null) SetupContentReaders();
 #endif
         }
@@ -286,7 +287,7 @@ namespace DaggerfallWorkshop
             if (!isReady)
             {
                 SetupSingleton();
-                SetupArena2Path();
+                SetupGameAssetPath();
                 SetupContentReaders();
             }
 
@@ -304,7 +305,7 @@ namespace DaggerfallWorkshop
         public void EditorResetArena2Path()
         {
             Settings.LoadSettings();
-            SetupArena2Path();
+            SetupGameAssetPath();
             SetupContentReaders(true);
         }
 
@@ -327,14 +328,15 @@ namespace DaggerfallWorkshop
         /// Sets new arena2 path and sets up DaggerfallUnity.
         /// </summary>
         /// <param name="arena2Path">New arena2 path. Must be valid.</param>
+        /// TODO: Refactor this into direct call to SetupGameAssetPath()
         public void ChangeArena2Path(string arena2Path)
         {
             Arena2Path = arena2Path;
-            SetupArena2Path();
+            SetupGameAssetPath();
             SetupContentReaders(true);
         }
 
-        private void SetupArena2Path()
+        private void SetupGameAssetPath()
         {
             // Clear path validated flag
             isPathValidated = false;
@@ -350,72 +352,44 @@ namespace DaggerfallWorkshop
             // Allow implementor to set own Arena2 path (e.g. from custom settings file)
             RaiseOnSetArena2SourceEvent();
 
-#if UNITY_EDITOR
-            // Check editor singleton path is valid
-            if (ValidateArena2Path(Arena2Path))
-            {
+            string[] pathsToSearch = AssetPathsToSearch();
+            IAssetFolder assetFolder = AssetFolderFactory.LocateAssetFolder(pathsToSearch);
+
+            if (assetFolder != null && assetFolder.FolderValid()) {
+                Arena2Path = assetFolder.GetPath();
                 isReady = true;
                 isPathValidated = true;
-                LogMessage("Arena2 path validated.", true);
-                return;
-            }
-#endif
+                LogMessage($"Game asset folder loaded at {Arena2Path}.", true);
+            
+            } else {
+                LogMessage(string.Format("Could not find game asset folder. Try setting MyDaggerfallPath in settings.ini."), true);
 
-            // Look for arena2/ARENA2 folder inside Settings.MyDaggerfallPath
-            bool found = false;
-            string path = TestArena2Exists(Settings.MyDaggerfallPath);
-            if (!string.IsNullOrEmpty(path))
-            {
-                //LogMessage("Trying Daggerfall path " + path, true);
-                if (Directory.Exists(path))
-                    found = true;
-                else
-                    LogMessage("Daggerfall path not found.", true);
+                // No path was found but we can try to carry on without one
+                // Many features will not work without a valid path
+                isReady = true;
             }
-
-            // Otherwise, look for arena2 folder in Application.dataPath at runtime
-            if (Application.isPlaying && !found)
-            {
-                path = TestArena2Exists(Application.dataPath);
-                if (!string.IsNullOrEmpty(path))
-                    found = true;
-            }
-
-            // Finally, look for arena2 folder in StreamingAssets/GameFiles
-            if (Application.isPlaying && !found)
-            { 
-                path = TestArena2Exists(Path.Combine(Application.streamingAssetsPath, "GameFiles"));
-                if (!string.IsNullOrEmpty(path))
-                    found = true;
-            }
-
-            // Did we find a path?
-            if (found)
-            {
-                // If it appears valid set this is as our path
-                //LogMessage(string.Format("Testing arena2 path at '{0}'.", path), true);
-                if (ValidateArena2Path(path))
-                {
-                    Arena2Path = path;
-                    isReady = true;
-                    isPathValidated = true;
-                    LogMessage(string.Format("Found valid arena2 path at '{0}'.", path), true);
-                    //Generate log file
-                    GenerateDiagLog.PrintInfo(Settings.MyDaggerfallPath);
-                    return;
-                }
-            }
-            else
-            {
-                LogMessage(string.Format("Could not find arena2 path. Try setting MyDaggerfallPath in settings.ini."), true);
-            }
-
-            // No path was found but we can try to carry on without one
-            // Many features will not work without a valid path
-            isReady = true;
 
             // Singleton is now ready
             RaiseOnReadyEvent();
+        }
+
+        private string[] AssetPathsToSearch() {
+            List<string> pathsToSearch = new List<string>();
+            
+            if (Arena2Path != null) {
+                pathsToSearch.Add(Arena2Path);
+            }
+
+            if (Settings.MyDaggerfallPath != null) {
+                pathsToSearch.Add(Settings.MyDaggerfallPath);
+            }
+            
+            if (Application.isPlaying) {
+                pathsToSearch.Add(Application.dataPath);
+                pathsToSearch.Add(Path.Combine(Application.streamingAssetsPath, "GameFiles"));
+            }
+
+            return pathsToSearch.ToArray();
         }
 
         private void SetupContentReaders(bool force = false)

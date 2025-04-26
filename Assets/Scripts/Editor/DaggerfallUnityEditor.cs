@@ -74,6 +74,7 @@ namespace DaggerfallWorkshop
             dfUnity.EditorUpdate();
 
 #if UNITY_EDITOR_LINUX
+            // TODO: Check if this is still necessary in Linux version of Unity
             string message = string.Empty;
             message += "Linux users please set your Daggerfall installation path (i.e. parent folder of complete Daggerfall install) in Resources/defaults.ini then click 'Update Path' below.";
             message += " This is a temporary limitation to work around Inspector bugs in experimental Linux build.";

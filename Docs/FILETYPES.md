@@ -62,6 +62,6 @@ Future Shock contains seven:
 * `MDMDENMS.BSA` - Enemy model data
 * `MDMDIMGS.BSA` - Image data
 * `MDMDMAPS.BSA` - Maps
-* `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies?
-* `MDMDOBJS.BSA` - Level objects - walls, rubble, interior items, etc
-* `MDMDSFXS.BSA` - Sound effects
+* `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? 
+* `MDMDOBJS.BSA` - Level objects - walls, rubble, interior items, etc. Equivalent to DF's `ARCH3D.BSA`.
+* `MDMDSFXS.BSA` - Sound effects, equivalent to DF's 'DAGGER.SND`.

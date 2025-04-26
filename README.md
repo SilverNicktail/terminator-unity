@@ -91,3 +91,9 @@ selected, so Terminator Unity will not work against copies already installed via
 * Processor: Intel i5 (Skylake) equivalent
 * Graphics: GTX 660 with 2GB video memory and up-to-date drivers
 * Memory: 4GB system RAM
+
+## Unity Version
+
+Daggerfall Unity was most recently developed against Unity 2019. I am hopeful that I can update the project to a more
+recent version. Not sure yet of the reason why this hasn't occurred upstream. Could be the custom tools that were
+developed for the project (which I plan to update as my first task anyway).

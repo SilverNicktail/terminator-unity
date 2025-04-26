@@ -784,10 +784,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 749f2e47-f08a-49c7-9fc9-76efc48f6add
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: Daggerfall Unity
-  organizationId: interkarma
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
