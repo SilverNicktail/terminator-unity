@@ -25,7 +25,7 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Items;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
-using TerminatorUnity.Validation;
+using TerminatorUnity.Asset;
 
 namespace DaggerfallWorkshop
 {

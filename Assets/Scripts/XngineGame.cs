@@ -3,7 +3,7 @@ namespace Bethesda {
     /// <summary>
     /// Useful enumeration of all XnGine games released
     /// </summary>
-    enum XngineGame {
+    public enum XngineGame {
 
         // Burnout: Championship Drag Racing (1998)
         BURNOUT_RACING,

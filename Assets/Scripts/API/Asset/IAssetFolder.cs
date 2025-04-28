@@ -1,4 +1,6 @@
-namespace TerminatorUnity.Validation
+using Bethesda;
+
+namespace TerminatorUnity.Asset
 {
 
     /// <summary>
@@ -6,6 +8,8 @@ namespace TerminatorUnity.Validation
     /// </summary>
     interface IAssetFolder
     {
+
+        XngineGame GetGame();
 
         string GetPath();
 

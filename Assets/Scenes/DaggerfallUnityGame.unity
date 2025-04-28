@@ -1123,7 +1123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0811f78212229814d8c469c916304789, type: 3}
       propertyPath: Arena2Path
-      value: G:\Daggerfall\Dagger\arena2
+      value: /home/silver/Downloads/DaggerfallGameFiles/arena2
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0811f78212229814d8c469c916304789, type: 3}
       propertyPath: Option_CombineRMB
@@ -2088,13 +2088,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeInternalStrings: Internal_Strings
   runtimeRSCStrings: Internal_RSC
-  runtimeBOKStrings: Internal_BOK
   runtimeFlatStrings: Internal_Flats
+  runtimeQuestsStrings: Internal_Quests
+  runtimeLocationsStrings: Internal_Locations
+  runtimeSettingsStrings: Internal_Settings
+  runtimeSpellsStrings: Internal_Spells
+  runtimeItemsStrings: Internal_Items
+  runtimeMagicItemsStrings: Internal_MagicItems
+  runtimeFactionsStrings: Internal_Factions
   tableCopyOverwriteTargetStringTables: 0
   tableCopyTargetInternalStrings: 
   tableCopyTargetRSCStrings: 
   tableCopyTargetBOKStrings: 
   tableCopyTargetFlatStrings: 
+  tableCopyTargetLocationStrings: 
 --- !u!4 &1437448955
 Transform:
   m_ObjectHideFlags: 0

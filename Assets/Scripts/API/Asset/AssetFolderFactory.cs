@@ -3,7 +3,7 @@ using System.IO;
 using Bethesda;
 using UnityEngine;
 
-namespace TerminatorUnity.Validation {
+namespace TerminatorUnity.Asset {
 
     static class AssetFolderFactory {
 
@@ -112,7 +112,8 @@ namespace TerminatorUnity.Validation {
                 case XngineGame.ES_DAGGERFALL:
                     return new DaggerfallFolder(path);
 
-                // TODO: Add Terminator asset loader
+                case XngineGame.T_FUTURE_SHOCK:
+                    return new ShockFolder(path);
 
                 default:
                     return null;

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+using Bethesda;
 using DaggerfallConnect.Utility;
 
-namespace TerminatorUnity.Validation
+namespace TerminatorUnity.Asset
 {
 
     /// <summary>
@@ -18,6 +16,10 @@ namespace TerminatorUnity.Validation
 
         public DaggerfallFolder(string path) {
             this.path = path;
+        }
+
+        public XngineGame GetGame() {
+            return XngineGame.ES_DAGGERFALL;
         }
 
         public string GetPath() {
