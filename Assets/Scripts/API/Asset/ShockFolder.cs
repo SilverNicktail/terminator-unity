@@ -16,7 +16,7 @@ namespace TerminatorUnity.Asset
     /// </summary>
     public class ShockFolder: IAssetFolder
     {
-        #region Fields
+        #region Filename Constants
 
         private const string textureSearchPattern = "TEXTURE.???";
 
@@ -28,21 +28,30 @@ namespace TerminatorUnity.Asset
 
         private const string midiSearchPattern = "*.HMI";
 
+        // In Terminator, no Daggerfall equivalent
         private const string briefingArchive = "MDMDBRIF.BSA";
 
+        // Equivalent of MONSTER.BSA
         private const string enemyArchive = "MDMDENMS.BSA";
 
+        // In Terminator, no Daggerfall equivalent?
         private const string imageArchive = "MDMDIMGS.BSA";
-
-        // Equivalent of ARCH3D.BSA - parameterise
-        private const string levelObjectArchive = "MDMDOBJS.BSA";
-
-        // Equivalent of DAGGER.SND
-        private const string sfxArchive = "MDMDSFXS.BSA";
 
         // Equivalent of MAPS.BSA
         private const string mapsArchive = "MDMDMAPS.BSA";
         
+        // Equivalent of ARCH3D.BSA - parameterise
+        private const string modelArchive = "MDMDOBJS.BSA";
+
+        private const string musicArchive = "MDMDMUSC.BSA";
+
+        // Equivalent of DAGGER.SND
+        private const string sfxArchive = "MDMDSFXS.BSA";
+
+        #endregion
+
+        #region Minimums
+
         private const int minTextureCount = 213;
 
         private const int minVidCount = 4;
@@ -53,36 +62,42 @@ namespace TerminatorUnity.Asset
 
         private const int minMidiCount = 16;
 
+        #endregion
+
+        #region Detected
+
         private readonly string path;
 
-        private bool hasTextures = false;
+        private bool hasBriefings = false;
 
-        private bool hasFonts = false;
+        private bool hasEnemies = false;
+
+        private bool hasImages = false;
 
         private bool hasModels = false;
 
         private bool hasMaps = false;
 
-        private bool hasMusic = false;
+        private bool hasMusicArchive = false;
 
         private bool hasSounds = false;
 
-        private bool hasHeightMaps = false;
+        private string[] fontFiles = {};
 
-        private bool hasVideos = false;
+        private string[] heightMapFiles = {};
+
+        private string[] musicFiles = {};
+
+        private string[] textureFiles = {};
+
+        private string[] videoFiles = {};
 
         #endregion
 
+        #region Logic
+
         public ShockFolder(string path) {
             this.path = path;
-        }
-
-        public XngineGame GetGame() {
-            return XngineGame.T_FUTURE_SHOCK;
-        }
-
-        public string GetPath() {
-            return this.path;
         }
 
         /// <summary>
@@ -98,45 +113,109 @@ namespace TerminatorUnity.Asset
                 return false;
             }
 
-            // Get files
-            string[] textures = Directory.GetFiles(path, textureSearchPattern);
-            string[] fonts = Directory.GetFiles(path, fontSearchPattern);
-            string[] music = Directory.GetFiles(path, midiSearchPattern);
-            string[] models = Directory.GetFiles(path, levelObjectArchive);
-            string[] maps = Directory.GetFiles(path, mapsArchive);
-            string[] sounds = Directory.GetFiles(path, sfxArchive);
-            string[] heightMaps = Directory.GetFiles(path, heightMapSearchPattern);
-            string[] videos = Directory.GetFiles(path, vidSearchPattern);
+            // Check for files
+            this.textureFiles = Directory.GetFiles(path, textureSearchPattern);
+            this.fontFiles = Directory.GetFiles(path, fontSearchPattern);
+            this.heightMapFiles = Directory.GetFiles(path, heightMapSearchPattern);
+            this.musicFiles = Directory.GetFiles(path, midiSearchPattern);
+            this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
-            // Validate texture count
-            this.hasTextures = textures.Length >= minTextureCount;
-            this.hasFonts = fonts.Length >= minFontCount;
-            this.hasMusic = music.Length >= minMidiCount;
-            this.hasModels = models.Length == 1;
-            this.hasMaps = maps.Length == 1;
-            this.hasSounds = sounds.Length == 1;
-            this.hasHeightMaps = heightMaps.Length >= minHeightMapCount;
-            this.hasVideos = videos.Length >= minVidCount;
+            Debug.Log($"Texture file count: {this.textureFiles.Length}");
+            Debug.Log($"Font file count: {this.fontFiles.Length}");
+            Debug.Log($"Height maps count: {this.heightMapFiles.Length}");
+            Debug.Log($"Music file count: {this.musicFiles.Length}");
+            Debug.Log($"Videos found? {this.videoFiles.Length}");
 
-            Debug.Log($"Textures found? {this.hasTextures}");
-            Debug.Log($"Fonts found? {this.hasFonts}");
-            Debug.Log($"Music found? {this.hasMusic}");
-            Debug.Log($"Models found? {this.hasModels}");
-            Debug.Log($"Maps found? {this.hasMaps}");
-            Debug.Log($"SFX found? {this.hasSounds}");
-            Debug.Log($"Height maps found? {this.hasHeightMaps}");
-            Debug.Log($"Videos found? {this.hasVideos}");
+            // Check for BSAs
+            this.hasBriefings = Directory.GetFiles(path, briefingArchive).Length == 1;
+            this.hasEnemies = Directory.GetFiles(path, enemyArchive).Length == 1;
+            this.hasImages = Directory.GetFiles(path, imageArchive).Length == 1;
+            this.hasMusicArchive = Directory.GetFiles(path, musicArchive).Length == 1;
+            this.hasModels = Directory.GetFiles(path, modelArchive).Length == 1;
+            this.hasMaps = Directory.GetFiles(path, mapsArchive).Length == 1;
+            this.hasSounds = Directory.GetFiles(path, sfxArchive).Length == 1;
+
+            Debug.Log($"Briefing archive found? {this.hasBriefings}");
+            Debug.Log($"Enemy archive found? {this.hasEnemies}");
+            Debug.Log($"Image archive found? {this.hasImages}");
+            Debug.Log($"Music archive found? {this.hasMusicArchive}");
+            Debug.Log($"Model archive found? {this.hasModels}");
+            Debug.Log($"Map archive found? {this.hasMaps}");
+            Debug.Log($"SFX archive found? {this.hasSounds}");
 
             return 
-                this.hasTextures &&
-                this.hasFonts &&
-                this.hasMusic &&
+                textureFiles.Length >= minTextureCount &&
+                fontFiles.Length >= minFontCount &&
+                musicFiles.Length >= minMidiCount &&
+                heightMapFiles.Length >= minHeightMapCount &&
+                videoFiles.Length >= minVidCount &&
+                this.hasMusicArchive &&
                 this.hasModels &&
                 this.hasMaps &&
-                this.hasSounds &&
-                this.hasHeightMaps &&
-                this.hasVideos;
+                this.hasSounds;
         }
+
+        #endregion
+
+        #region Accessors
+
+        public XngineGame GetGame() {
+            return XngineGame.T_FUTURE_SHOCK;
+        }
+
+        public string GetPath() {
+            return this.path;
+        }
+
+        public string[] GetTextureFilepaths() {
+            return this.textureFiles;
+        }
+
+        public string[] GetFontFilepaths() {
+            return this.fontFiles;
+        }
+
+        public string[] GetHeightMapFilepaths() {
+            return this.heightMapFiles;
+        }
+
+        public string[] GetMusicFilepaths() {
+            return this.musicFiles;
+        }
+
+        public string[] GetVideoFilepaths() {
+            return this.videoFiles;
+        }
+
+        public string GetBriefingArchivePath() {
+            return this.hasBriefings ? Path.Combine(this.path, briefingArchive) : null;
+        }
+
+        public string GetEnemyArchivePath() {
+            return this.hasEnemies ? Path.Combine(this.path, enemyArchive) : null;
+        }
+
+        public string GetImageArchivePath() {
+            return this.hasImages ? Path.Combine(this.path, imageArchive) : null;
+        }
+
+        public string GetMusicArchivePath() {
+            return this.hasMusicArchive ? Path.Combine(this.path, musicArchive) : null;
+        }
+
+        public string GetModelsArchivePath() {
+            return this.hasModels ? Path.Combine(this.path, modelArchive) : null;
+        }
+
+        public string GetMapArchivePath() {
+            return this.hasMaps ? Path.Combine(this.path, mapsArchive) : null;
+        }
+
+        public string GetSFXArchivePath() {
+            return this.hasSounds ? Path.Combine(this.path, sfxArchive) : null;
+        }
+
+        #endregion
 
     }
 }
