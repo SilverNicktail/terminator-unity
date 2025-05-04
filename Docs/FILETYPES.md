@@ -28,7 +28,7 @@ display the glyphs, however only the first 5 load. Need to investigate why.
 and builds up to max values in one long gradient. Could this be how the draw distance is implemented? That can't be
 right.
 
-`xxx.HMI`
+[`xxx.HMI`](./MUSIC.md)
 : MIDI files, confirmed from Daggerfall's `MIDI.BSA`. In the Human Machine Interface proprietary format. Was able to 
 convert one to regular MIDI using an [open source utility](https://github.com/Sembiance/midistar2mid/).
 
@@ -58,10 +58,12 @@ there's 17 missions in the game. (The final mission is entirely indoors though, 
 
 Future Shock contains seven:
 
-* `MDMDBRIF.BSA` - Briefing/bestiary data, TBC
-* `MDMDENMS.BSA` - Enemy model data
+* `MDMDBRIF.BSA` - Briefing/bestiary data, TBC.
+* `MDMDENMS.BSA` - Enemy model data, equivalent of MONSTER.BSA
 * `MDMDIMGS.BSA` - Image data
-* `MDMDMAPS.BSA` - Maps
-* `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? 
+* `MDMDMAPS.BSA` - Maps, equivalent of DF's MAPS.BSA
+* `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? Asset folder also contains lots of HMI files, as above, so these may be intended specifically for video.
 * `MDMDOBJS.BSA` - Level objects - walls, rubble, interior items, etc. Equivalent to DF's `ARCH3D.BSA`.
 * `MDMDSFXS.BSA` - Sound effects, equivalent to DF's 'DAGGER.SND`.
+
+(Anyone want to take a guess at what the hell "MDMD" stands for?)
