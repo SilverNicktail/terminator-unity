@@ -70,6 +70,7 @@ namespace DaggerfallWorkshop
 
         // General
         public string Arena2Path; // Need to manage access to this better
+        private IAssetFolder loadedAssetFolder;
         public int ModelImporter_ModelID = 456;
         public string BlockImporter_BlockName = "MAGEAA01.RMB";
         public string CityImporter_CityName = "Daggerfall/Daggerfall";
@@ -394,19 +395,20 @@ namespace DaggerfallWorkshop
 
         private void SetupContentReaders(bool force = false)
         {
-            if (reader == null || force)
+            if (this.loadedAssetFolder == null || (reader != null && !force)) {
+                return;
+            }
+
+            // Ensure content readers available even when path not valid
+            if (isPathValidated)
             {
-                // Ensure content readers available even when path not valid
-                if (isPathValidated)
-                {
-                    DaggerfallUnity.LogMessage(string.Format("Setting up content readers with arena2 path '{0}'.", Arena2Path));
-                    reader = new ContentReader(Arena2Path);
-                }
-                else
-                {
-                    DaggerfallUnity.LogMessage(string.Format("Setting up content readers without arena2 path. Not all features will be available."));
-                    reader = new ContentReader(string.Empty);
-                }
+                DaggerfallUnity.LogMessage(string.Format("Setting up content readers with arena2 path '{0}'.", Arena2Path));
+                reader = new ContentReader(Arena2Path);
+            }
+            else
+            {
+                DaggerfallUnity.LogMessage(string.Format("Setting up content readers without arena2 path. Not all features will be available."));
+                reader = new ContentReader(string.Empty);
             }
         }
 

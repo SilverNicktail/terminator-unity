@@ -15,6 +15,7 @@ using System.IO;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
 using System;
+using TerminatorUnity.Asset;
 
 namespace DaggerfallWorkshop.Utility
 {
@@ -25,6 +26,7 @@ namespace DaggerfallWorkshop.Utility
     {
         bool isReady = false;
         string arena2Path;
+        IAssetFolder assetFolder;
         
         BlocksFile blockFileReader;
         MapsFile mapFileReader;
@@ -36,6 +38,9 @@ namespace DaggerfallWorkshop.Utility
         Dictionary<int, MapSummary> mapDict;
         Dictionary<int, int> locationIdToMapIdDict;
 
+        // Most external references to ContentReader are actually to this
+        // Potential refactor here to make using ContentReader with different
+        // games more intuitive.
         public struct MapSummary
         {
             public int ID;                  // mapTable.MapId & 0x000fffff for dict key and matching with ExteriorData.MapId
@@ -88,6 +93,12 @@ namespace DaggerfallWorkshop.Utility
         }
 
         #region Constructors
+
+        public ContentReader(IAssetFolder assetFolder) {
+            this.assetFolder = assetFolder;
+            this.arena2Path = assetFolder.GetPath();
+            this.SetupReaders();
+        }
 
         public ContentReader(string arena2Path)
         {

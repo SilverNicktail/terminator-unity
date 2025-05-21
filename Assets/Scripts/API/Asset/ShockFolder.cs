@@ -14,7 +14,7 @@ namespace TerminatorUnity.Asset
     /// Does not verify contents, just that critical files exist in minimum quantities.
     /// This allows test to be fast enough to be run at startup.
     /// </summary>
-    public class ShockFolder: IAssetFolder
+    public class ShockFolder : IAssetFolder
     {
         #region Filename Constants
 
@@ -39,7 +39,7 @@ namespace TerminatorUnity.Asset
 
         // Equivalent of MAPS.BSA
         private const string mapsArchive = "MDMDMAPS.BSA";
-        
+
         // Equivalent of ARCH3D.BSA - parameterise
         private const string modelArchive = "MDMDOBJS.BSA";
 
@@ -82,21 +82,22 @@ namespace TerminatorUnity.Asset
 
         private bool hasSounds = false;
 
-        private string[] fontFiles = {};
+        private string[] fontFiles = { };
 
-        private string[] heightMapFiles = {};
+        private string[] heightMapFiles = { };
 
-        private string[] musicFiles = {};
+        private string[] musicFiles = { };
 
-        private string[] textureFiles = {};
+        private string[] textureFiles = { };
 
-        private string[] videoFiles = {};
+        private string[] videoFiles = { };
 
         #endregion
 
         #region Logic
 
-        public ShockFolder(string path) {
+        public ShockFolder(string path)
+        {
             this.path = path;
         }
 
@@ -106,10 +107,12 @@ namespace TerminatorUnity.Asset
         ///  Does not verify contents so test is quite speedy and can be performed at startup.
         ///  Will also look for main .BSA files in Unity Resources folder.
         /// </summary>
-        public bool FolderValid() {
+        public bool FolderValid(bool requireVideos = false)
+        {
 
             // Check folder exists
-            if (string.IsNullOrEmpty(path) || !Directory.Exists(path)) {
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+            {
                 return false;
             }
 
@@ -143,12 +146,12 @@ namespace TerminatorUnity.Asset
             Debug.Log($"Map archive found? {this.hasMaps}");
             Debug.Log($"SFX archive found? {this.hasSounds}");
 
-            return 
+            return
                 textureFiles.Length >= minTextureCount &&
                 fontFiles.Length >= minFontCount &&
                 musicFiles.Length >= minMidiCount &&
                 heightMapFiles.Length >= minHeightMapCount &&
-                videoFiles.Length >= minVidCount &&
+                (!requireVideos || videoFiles.Length >= minVidCount) &&
                 this.hasMusicArchive &&
                 this.hasModels &&
                 this.hasMaps &&
@@ -159,60 +162,84 @@ namespace TerminatorUnity.Asset
 
         #region Accessors
 
-        public XngineGame GetGame() {
+        public XngineGame GetGame()
+        {
             return XngineGame.T_FUTURE_SHOCK;
         }
 
-        public string GetPath() {
+        public string GetPath()
+        {
             return this.path;
         }
 
-        public string[] GetTextureFilepaths() {
+        public string[] GetTextureFilepaths()
+        {
             return this.textureFiles;
         }
 
-        public string[] GetFontFilepaths() {
+        public string[] GetFontFilepaths()
+        {
             return this.fontFiles;
         }
 
-        public string[] GetHeightMapFilepaths() {
+        public string[] GetHeightMapFilepaths()
+        {
             return this.heightMapFiles;
         }
 
-        public string[] GetMusicFilepaths() {
+        public string[] GetMusicFilepaths()
+        {
             return this.musicFiles;
         }
 
-        public string[] GetVideoFilepaths() {
+        public string[] GetVideoFilepaths()
+        {
             return this.videoFiles;
         }
 
-        public string GetBriefingArchivePath() {
+        public string GetBriefingArchivePath()
+        {
             return this.hasBriefings ? Path.Combine(this.path, briefingArchive) : null;
         }
 
-        public string GetEnemyArchivePath() {
+        public string GetEnemyArchivePath()
+        {
             return this.hasEnemies ? Path.Combine(this.path, enemyArchive) : null;
         }
 
-        public string GetImageArchivePath() {
+        public string GetImageArchivePath()
+        {
             return this.hasImages ? Path.Combine(this.path, imageArchive) : null;
         }
 
-        public string GetMusicArchivePath() {
+        public string GetMusicArchivePath()
+        {
             return this.hasMusicArchive ? Path.Combine(this.path, musicArchive) : null;
         }
 
-        public string GetModelsArchivePath() {
+        public string GetModelsArchivePath()
+        {
             return this.hasModels ? Path.Combine(this.path, modelArchive) : null;
         }
 
-        public string GetMapArchivePath() {
+        public string GetMapArchivePath()
+        {
             return this.hasMaps ? Path.Combine(this.path, mapsArchive) : null;
         }
 
-        public string GetSFXArchivePath() {
+        public string GetMapBlockArchivePath()
+        {
+            return null; // FS doesn't have map blocks, AFAIK
+        }
+
+        public string GetSFXArchivePath()
+        {
             return this.hasSounds ? Path.Combine(this.path, sfxArchive) : null;
+        }
+
+        public string GetWoodsArchivePath()
+        {
+            return null;
         }
 
         #endregion
