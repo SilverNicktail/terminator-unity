@@ -356,14 +356,26 @@ namespace DaggerfallWorkshop
             string[] pathsToSearch = AssetPathsToSearch();
             IAssetFolder assetFolder = AssetFolderFactory.LocateAssetFolder(pathsToSearch);
 
-            if (assetFolder != null && assetFolder.FolderValid()) {
+            if (assetFolder != null && assetFolder.FolderValid())
+            {
+                loadedAssetFolder = assetFolder;
                 Arena2Path = assetFolder.GetPath();
                 isReady = true;
                 isPathValidated = true;
                 LogMessage($"Game asset folder loaded at {Arena2Path}.", true);
-            
-            } else {
-                LogMessage(string.Format("Could not find game asset folder. Try setting MyDaggerfallPath in settings.ini."), true);
+
+            }
+            else
+            {
+
+                if (assetFolder == null)
+                {
+                    LogMessage("Could not find game asset folder. Try setting MyDaggerfallPath in settings.ini.", true);
+                }
+                else
+                {
+                    LogMessage($"Asset folder was found at {assetFolder.GetPath()} but is not a valid/supported game folder", true);
+                }
 
                 // No path was found but we can try to carry on without one
                 // Many features will not work without a valid path
