@@ -74,16 +74,15 @@ namespace DaggerfallWorkshop
             dfUnity.EditorUpdate();
 
 #if UNITY_EDITOR_LINUX
-            // TODO: Check if this is still necessary in Linux version of Unity
+            // TODO: Try and find a better solution. Move this to editor settings?
             string message = string.Empty;
-            message += "Linux users please set your Daggerfall installation path (i.e. parent folder of complete Daggerfall install) in Resources/defaults.ini then click 'Update Path' below.";
+            message += "Linux users please set your xNgine game asset path installation path in Resources/defaults.ini then click 'Update Path' below.";
             message += " This is a temporary limitation to work around Inspector bugs in experimental Linux build.";
             EditorGUILayout.HelpBox(message, MessageType.Info);
             EditorGUILayout.SelectableLabel(dfUnity.Arena2Path, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
             if (GUILayout.Button("Update Path"))
             {
-                dfUnity.Arena2Path = string.Empty;
-                dfUnity.EditorResetArena2Path();
+                dfUnity.EditorClearArena2Path();
             }
 #else
             // Get properties
@@ -93,22 +92,21 @@ namespace DaggerfallWorkshop
             EditorGUILayout.Space();
             GUILayoutHelper.Horizontal(() =>
             {
-                EditorGUILayout.LabelField(new GUIContent("Arena2 Path", "The local Arena2 path used for development only."), GUILayout.Width(EditorGUIUtility.labelWidth - 4));
+                EditorGUILayout.LabelField(new GUIContent("Asset Folder Path", "The local game asset folder used for development only."), GUILayout.Width(EditorGUIUtility.labelWidth - 4));
                 EditorGUILayout.SelectableLabel(dfUnity.Arena2Path, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
                 if (GUILayout.Button("Browse..."))
                 {
-                    string path = EditorUtility.OpenFolderPanel("Locate Arena2 Path", "", "");
+                    string path = EditorUtility.OpenFolderPanel("Locate game asset folder", "", "");
                     if (!string.IsNullOrEmpty(path))
                     {
-                        if (!DaggerfallUnity.ValidateArena2Path(path))
+                        if (!DaggerfallUnity.ValidateAssetFolderPath(path))
                         {
-                            EditorUtility.DisplayDialog("Invalid Path", "The selected Arena2 path is invalid", "Close");
+                            EditorUtility.DisplayDialog("Invalid Path", "The selected asset folder path is invalid", "Close");
                         }
                         else
                         {
-                            dfUnity.Arena2Path = path;
                             propArena2Path.stringValue = path;
-                            dfUnity.EditorResetArena2Path();
+                            dfUnity.ChangeArena2Path(path);
                         }
                     }
                 }

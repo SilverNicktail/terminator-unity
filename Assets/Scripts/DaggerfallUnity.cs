@@ -300,24 +300,12 @@ namespace DaggerfallWorkshop
         }
 
         /// <summary>
-        /// Setup path and content readers again.
-        /// Used by editor when setting new Arena2Path.
-        /// </summary>
-        public void EditorResetArena2Path()
-        {
-            Settings.LoadSettings();
-            SetupGameAssetPath();
-            SetupContentReaders(true);
-        }
-
-        /// <summary>
         /// Clear Arena2 path in editor.
         /// Used when you wish to decouple from Arena2 for certain builds.
         /// </summary>
         public void EditorClearArena2Path()
         {
-            Arena2Path = string.Empty;
-            EditorResetArena2Path();
+            ChangeArena2Path(null);
         }
 #endif
 
@@ -330,9 +318,14 @@ namespace DaggerfallWorkshop
         /// </summary>
         /// <param name="arena2Path">New arena2 path. Must be valid.</param>
         /// TODO: Refactor this into direct call to SetupGameAssetPath()
-        public void ChangeArena2Path(string arena2Path)
+        public void ChangeArena2Path(string arena2Path = null)
         {
-            Arena2Path = arena2Path;
+            arena2Path = arena2Path ?? string.Empty;
+
+#if UNITY_EDITOR
+            Settings.LoadSettings();
+#endif
+
             SetupGameAssetPath();
             SetupContentReaders(true);
         }
@@ -361,7 +354,7 @@ namespace DaggerfallWorkshop
                 loadedAssetFolder = assetFolder;
                 Arena2Path = assetFolder.GetPath();
                 isReady = true;
-                isPathValidated = true;
+                isPathValidated = assetFolder.FolderValid();
                 LogMessage($"Game asset folder loaded at {Arena2Path}.", true);
 
             }
@@ -459,12 +452,14 @@ namespace DaggerfallWorkshop
                 return string.Empty;
         }
 
-        public static bool ValidateArena2Path(string path)
+        public static bool ValidateAssetFolderPath(string path)
         {
-            DFValidator.ValidationResults results;
-            DFValidator.ValidateArena2Folder(path, out results);
+            return ValidateAssetFolderPaths(new string[] { path });
+        }
 
-            return results.AppearsValid;
+        public static bool ValidateAssetFolderPaths(string[] paths) {
+            IAssetFolder assetFolder = AssetFolderFactory.LocateAssetFolder(paths);
+            return assetFolder != null && assetFolder.FolderValid();
         }
 
         static ulong GetNextUID()
