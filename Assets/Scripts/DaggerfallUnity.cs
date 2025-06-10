@@ -320,7 +320,7 @@ namespace DaggerfallWorkshop
         /// TODO: Refactor this into direct call to SetupGameAssetPath()
         public void ChangeArena2Path(string arena2Path = null)
         {
-            arena2Path = arena2Path ?? string.Empty;
+            this.Arena2Path = arena2Path ?? string.Empty;
 
 #if UNITY_EDITOR
             Settings.LoadSettings();
