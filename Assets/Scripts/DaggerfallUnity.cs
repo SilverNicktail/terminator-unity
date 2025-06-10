@@ -69,8 +69,8 @@ namespace DaggerfallWorkshop
         #region Public Fields
 
         // General
-        public string Arena2Path; // Need to manage access to this better
-        private IAssetFolder loadedAssetFolder;
+        public string Arena2Path; // TODO: Kill off, replaced with asset folder
+        public IAssetFolder loadedAssetFolder { get; private set; }
         public int ModelImporter_ModelID = 456;
         public string BlockImporter_BlockName = "MAGEAA01.RMB";
         public string CityImporter_CityName = "Daggerfall/Daggerfall";
@@ -382,7 +382,7 @@ namespace DaggerfallWorkshop
         private string[] AssetPathsToSearch() {
             List<string> pathsToSearch = new List<string>();
             
-            if (Arena2Path != null) {
+            if (Arena2Path != null && Arena2Path.Trim().Length > 0) {
                 pathsToSearch.Add(Arena2Path);
             }
 

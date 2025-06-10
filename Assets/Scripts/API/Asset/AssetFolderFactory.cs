@@ -44,6 +44,12 @@ namespace TerminatorUnity.Asset {
         // Does basic checks on folder contents to recognise which game they belong to
         // More advanced checks will be done by the asset folder implementation
         public static IAssetFolder DetectAssetFolderType(string path) {
+
+            if (path == null || path.Trim().Length == 0)
+            {
+                Debug.Log("Empty path was handed to folder detection, skipping.");
+                return null;
+            }
             
             // Case sensitivity depends on target filesystem
             // Insensitive on Windows, sensitive on Linux, etc
