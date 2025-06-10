@@ -4,7 +4,6 @@
 #region Using Statements
 using System.IO;
 using Bethesda;
-using UnityEngine;
 #endregion
 
 namespace TerminatorUnity.Asset
@@ -123,12 +122,6 @@ namespace TerminatorUnity.Asset
             this.musicFiles = Directory.GetFiles(path, midiSearchPattern);
             this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
-            Debug.Log($"Texture file count: {this.textureFiles.Length}");
-            Debug.Log($"Font file count: {this.fontFiles.Length}");
-            Debug.Log($"Height maps count: {this.heightMapFiles.Length}");
-            Debug.Log($"Music file count: {this.musicFiles.Length}");
-            Debug.Log($"Videos found? {this.videoFiles.Length}");
-
             // Check for BSAs
             this.hasBriefings = Directory.GetFiles(path, briefingArchive).Length == 1;
             this.hasEnemies = Directory.GetFiles(path, enemyArchive).Length == 1;
@@ -137,14 +130,6 @@ namespace TerminatorUnity.Asset
             this.hasModels = Directory.GetFiles(path, modelArchive).Length == 1;
             this.hasMaps = Directory.GetFiles(path, mapsArchive).Length == 1;
             this.hasSounds = Directory.GetFiles(path, sfxArchive).Length == 1;
-
-            Debug.Log($"Briefing archive found? {this.hasBriefings}");
-            Debug.Log($"Enemy archive found? {this.hasEnemies}");
-            Debug.Log($"Image archive found? {this.hasImages}");
-            Debug.Log($"Music archive found? {this.hasMusicArchive}");
-            Debug.Log($"Model archive found? {this.hasModels}");
-            Debug.Log($"Map archive found? {this.hasMaps}");
-            Debug.Log($"SFX archive found? {this.hasSounds}");
 
             return
                 textureFiles.Length >= minTextureCount &&
