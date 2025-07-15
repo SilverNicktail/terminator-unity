@@ -5,16 +5,20 @@
 // Contact:         Gavin Clayton (interkarma@dfworkshop.net)
 // Project Page:    https://github.com/Interkarma/daggerfall-unity
 
-using UnityEngine;
-using UnityEditor;
-using System;
-using System.Xml;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using DaggerfallWorkshop.Utility;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
+using UnityEditor;
+using UnityEngine;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+using System.Linq;
+using System;
+
+// Irritated non-American note: do you know how many times I've had to go
+// back and change "colour" to "color" in my code so it's at least consistent? - Silver
 
 namespace DaggerfallWorkshop
 {
@@ -23,38 +27,53 @@ namespace DaggerfallWorkshop
     /// </summary>
     public class FontExporterWindow : EditorWindow
     {
+
         const string windowTitle = "Font Exporter";
         const string menuPath = "Daggerfall Tools/Font Exporter [Beta]";
 
-        public FontSelection fontSelection = FontSelection.FONT0001;
-        public Color BackgroundColor = Color.clear;
-        public Color TextColor = Color.white;
-        public FilterMode TextureFilterMode = FilterMode.Bilinear;
-        public int CharacterSpacing = 1;
-        public string ResourcesPath = "Assets/Resources/";
-
         DaggerfallUnity dfUnity;
-        FntFile fntFile = new FntFile();
-        Texture2D fontPreviewTexture;
-        FontSelection lastFontSelection = (FontSelection)(-1);
-        Color lastBackgroundColor = Color.clear;
-        Color lastTextColor = Color.white;
-        FilterMode lastFilterMode = FilterMode.Bilinear;
+        FntFile fontLoader = new FntFile();
 
-        public enum FontSelection
-        {
-            FONT0000,
-            FONT0001,
-            FONT0002,
-            FONT0003,
-            FONT0004,
-        }
+        private static readonly Color defaultBackgroundColor = Color.white;
 
-        public string FontName
-        {
-            get { return fontSelection.ToString(); }
-        }
+        private static readonly Color defaultTextColor = Color.black;
 
+        private static readonly FilterMode defaultFilterMode = FilterMode.Bilinear;
+
+        private static readonly int defaultCharacterSpacing = -1;
+
+        private static readonly string defaultOutputFolder = "Assets/Resources/Fonts/";
+
+        private Dictionary<string, string> fontFilepaths;
+
+        #region Form Bindings
+
+        [SerializeField]
+        private string selectedFilename = null;
+
+        [SerializeField]
+        private Color backgroundColor = defaultBackgroundColor;
+
+        [SerializeField]
+        private Color textColor = defaultTextColor;
+
+        [SerializeField]
+        private FilterMode filterMode = FilterMode.Bilinear;
+
+        [SerializeField]
+        private int characterSpacing = defaultCharacterSpacing;
+
+        [SerializeField]
+        private string outputPath = defaultOutputFolder;
+
+        #endregion
+
+        private ScrollView glyphArea = null;
+
+
+        // TODO: Put this into a menu check?
+        // Could disable the menu item if asset folder isn't available,
+        // though the notification message in the panel is useful.
         [MenuItem(menuPath)]
         static void Init()
         {
@@ -62,137 +81,276 @@ namespace DaggerfallWorkshop
             window.titleContent = new GUIContent(windowTitle);
         }
 
-        void OnGUI()
+        #region GUI
+
+        // Could argue that this should be split up among other methods but...
+        /// https://issuetracker.unity3d.com/issues/creategui-gets-executed-before-awake-and-onenable-when-opening-a-project-with-a-custom-window-already-open
+        /// TODO: Move most of this to XML/CSS
+        private void CreateGUI()
         {
-            if (!IsReady())
+
+            if (!dfUnity)
             {
-                EditorGUILayout.HelpBox("DaggerfallUnity instance not ready. Have you set your Arena2 path?", MessageType.Info);
+                dfUnity = DaggerfallUnity.Instance;
+            }
+
+            VisualElement root = rootVisualElement;
+
+            if (dfUnity.loadedAssetFolder == null)
+            {
+                // TODO: Improve layout of this message
+                root.Add(new Label(
+                    "Game asset folder has not been set or is not valid. " +
+                    "Please make sure your asset path is set and correct."
+                ));
                 return;
             }
 
-            // Load font when changed or not loaded
-            if (lastFontSelection != fontSelection ||
-                lastBackgroundColor != BackgroundColor ||
-                lastTextColor != TextColor ||
-                lastFilterMode != TextureFilterMode ||
-                !fntFile.IsLoaded)
+            // 2019 version of PopupField can't handle matching custom objects, so we'll
+            // feed it filenames and use them as keys in a dictionary for the full path
+            // https://discussions.unity.com/t/popupfield-binding-gives-error-field-type-is-not-compatible-with-property/780775
+            fontFilepaths = dfUnity.loadedAssetFolder.GetFontFilepaths().ToDictionary(
+                path => Path.GetFileName(path),
+                path => path
+            );
+
+            var filenames = fontFilepaths.Keys.ToList();
+            filenames.Sort();
+            selectedFilename = filenames[0];
+
+            // TODO: Error if no font files found
+            PopupField<string> fontFileField = new PopupField<string>(
+                "Font File", filenames, selectedFilename)
             {
-                LoadFont();
-                UpdateFontPreview();
-            }
+                bindingPath = "selectedFilename",
+                tooltip = "Select a detected font file from the asset folder."
+            };
+            fontFileField.RegisterValueChangedCallback(OnFontSelectionChange);
+            root.Add(fontFileField);
 
-            // Exit if font not loaded for some reason
-            if (!fntFile.IsLoaded || !fontPreviewTexture)
+            ColorField bgColor = new ColorField("Background Color")
             {
-                EditorGUILayout.HelpBox("Could not load font.", MessageType.Info);
-                return;
-            }
+                bindingPath = "backgroundColor",
+                tooltip = "Background color of generated font."
+            };
+            bgColor.RegisterValueChangedCallback(OnFontColorChange);
+            root.Add(bgColor);
 
-            // Font selection
-            EditorGUILayout.Space();
-            fontSelection = (FontSelection)EditorGUILayout.EnumPopup(new GUIContent("Font", "Select one of the supported Daggerfall fonts."), (FontSelection)fontSelection);
-
-            // Font colours
-            BackgroundColor = EditorGUILayout.ColorField(new GUIContent("Background Color", "Background color of font."), BackgroundColor);
-            TextColor = EditorGUILayout.ColorField(new GUIContent("Text Color", "Text color of font."), TextColor);
-
-            // Preview filtering
-            TextureFilterMode = (FilterMode)EditorGUILayout.EnumPopup(new GUIContent("Filter Mode", "FilterMode of generated texture."), (FilterMode)TextureFilterMode);
-
-            // Character spacing
-            CharacterSpacing = EditorGUILayout.IntSlider(new GUIContent("Character Spacing", "Number of pixels between characters."), CharacterSpacing, 0, 4);
-
-            // Resources path
-            ResourcesPath = EditorGUILayout.TextField(new GUIContent("Resources Path", "Target Resources path. Must be a Resources folder."), ResourcesPath.Trim());
-
-            // Buttons
-            GUILayoutHelper.Horizontal(() =>
+            ColorField textColor = new ColorField("Text Color")
             {
-                if (GUILayout.Button("Reset Colors"))
-                {
-                    BackgroundColor = Color.clear;
-                    TextColor = Color.white;
-                }
-                if (GUILayout.Button("Generate Custom Font"))
-                {
-                    Texture2D fontAtlas;
-                    Rect[] fontRects;
-                    if (SaveFontTextureAsset(this.FontName, out fontAtlas, out fontRects))
-                    {
-                        Font font;
-                        Material material;
-                        SaveOtherFontAssets(this.FontName, fontAtlas, out font, out material);
-                        //ImportFontSettings(fntFile,font, fontRects, CharacterSpacing);
-                    }
-                }
+                bindingPath = "textColor",
+                tooltip = "Foreground/stroke color of generated font."
+            };
+            textColor.RegisterValueChangedCallback(OnFontColorChange);
+            root.Add(textColor);
+
+            Button resetColorButton = new Button()
+            {
+                name = "colorResetButton",
+                text = "Reset Colors",
+                tooltip = "Resets foreground & background colors to defaults."
+            };
+            resetColorButton.clicked += ResetColors;
+            root.Add(resetColorButton);
+
+            EnumField filteringMode = new EnumField("Preview Filtering", filterMode)
+            {
+                bindingPath = "filterMode",
+                tooltip = "Filtering to apply to font preview."
+            };
+            filteringMode.RegisterValueChangedCallback(OnFilterModeChange);
+            root.Add(filteringMode);
+
+            // TODO: Do we need this?
+            root.Add(new SliderInt("Character Spacing", -1, 4)
+            {
+                bindingPath = "characterSpacing",
+                tooltip = "Number of pixels between characters in generated font."
             });
 
-            // Note for exporters
-            string path = Path.Combine(ResourcesPath, this.FontName);
-            EditorGUILayout.HelpBox(string.Format("Font will be saved to {0}...", path), MessageType.Info);
+            root.Add(new TextField("Output Path")
+            {
+                bindingPath = "outputPath",
+                isReadOnly = true,
+                tooltip = "Location where the generated font will be saved."
+            });
+            Button pathSelector = new Button()
+            {
+                name = "outputPathButton",
+                text = "Select Path",
+                tooltip = "Select the location where the generated font will be saved."
+            };
+            pathSelector.clicked += SelectOutputPath;
+            root.Add(pathSelector);
 
-            // Font preview
-            EditorGUILayout.Space();
-            DrawFontPreview();
+            Button generateButton = new Button()
+            {
+                name = "generateButton",
+                text = "Generate Custom Font",
+                tooltip = "Generate the custom font file."
+            };
+            generateButton.clicked += GenerateFont;
+            root.Add(generateButton);
+
+            glyphArea = new ScrollView()
+            {
+                name = "fontPreviewScroller",
+                showHorizontal = true,
+                showVertical = true,
+                tooltip = "Font Preview"
+            };
+
+            // TODO: Move styling to USS when layout goes to XML
+            glyphArea.contentContainer.style.flexDirection = FlexDirection.Row;
+            glyphArea.contentContainer.style.flexWrap = Wrap.Wrap;
+            glyphArea.contentContainer.style.paddingTop = new StyleLength(5);
+            glyphArea.contentContainer.style.paddingRight = new StyleLength(5);
+            glyphArea.contentContainer.style.paddingBottom = new StyleLength(5);
+            glyphArea.contentContainer.style.paddingLeft = new StyleLength(5);
+            root.Add(glyphArea);
+
+            root.Bind(new SerializedObject(this));
+
+            // Init values to defaults, they get overwritten to element defaults on bind
+            ResetForm();
+
+            LoadFont(selectedFilename);
         }
 
-        void DrawFontPreview()
+        #endregion
+
+        #region Event Handlers
+
+        // TODO: Combine and debounce
+        private void OnFontSelectionChange(ChangeEvent<string> changeEvent)
         {
-            // Exit if texture not present
-            if (!fontPreviewTexture)
+            if (changeEvent.previousValue == changeEvent.newValue)
+            {
                 return;
-
-            // Draw scaled preview texture
-            int height = (int)(((float)Screen.width / (float)fontPreviewTexture.width) * (float)fontPreviewTexture.height);
-            Rect previewRect = EditorGUILayout.GetControlRect(false, height);
-            GUI.DrawTextureWithTexCoords(previewRect, fontPreviewTexture, new Rect(0, 0, 1, -1));
+            }
+            LoadFont(changeEvent.newValue);
         }
+
+        private void OnFontColorChange(ChangeEvent<Color> changeEvent)
+        {
+            if (changeEvent.previousValue == changeEvent.newValue)
+            {
+                return;
+            }
+            LoadFont();
+        }
+
+        private void OnFilterModeChange(ChangeEvent<Enum> changeEvent)
+        {
+            if (changeEvent.previousValue == changeEvent.newValue)
+            {
+                return;
+            }
+            LoadFont();
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("Destroying Font Exporter window");
+        }
+
+        private void ResetForm()
+        {
+            ResetColors();
+            filterMode = defaultFilterMode;
+            characterSpacing = defaultCharacterSpacing;
+            outputPath = defaultOutputFolder;
+        }
+
+        private void ResetColors()
+        {
+            backgroundColor = defaultBackgroundColor;
+            textColor = defaultTextColor;
+            LoadFont();
+        }
+
+        private void SelectOutputPath()
+        {
+            string selectedPath = EditorUtility.SaveFilePanelInProject(
+                "Select Output Location", selectedFilename, "fnt",
+                "Please select where you want to save the custom font file"
+            );
+
+            if (selectedPath != null && selectedPath.Length > 0)
+            {
+                outputPath = selectedPath;
+            }
+        }
+
+        #endregion
 
         #region Private Methods
 
-        bool IsReady()
+        private void LoadFont(string targetFilename = null)
         {
-            if (!dfUnity)
-                dfUnity = DaggerfallUnity.Instance;
-            if (!dfUnity.IsReady)
-                return false;
+            var filename = targetFilename ?? selectedFilename;
 
-            return true;
-        }
-
-        void LoadFont()
-        {
-            string filename = fontSelection.ToString() + ".FNT";
-            if (fntFile.Load(Path.Combine(dfUnity.Arena2Path, filename), FileUsage.UseMemory, true))
+            if (filename == null || filename.Length == 0)
             {
-                lastFontSelection = fontSelection;
+                return;
             }
+
+            // TODO: Show load error
+            fontLoader.Load(fontFilepaths[filename], FileUsage.UseMemory, true);
+            Texture2D[] previewGlyphs = ImageProcessing.CreateFixedWidthGlyphArray(fontLoader, backgroundColor, textColor);
+
+            DrawFontPreview(previewGlyphs);
         }
 
-        void UpdateFontPreview()
+        private void DrawFontPreview(Texture2D[] previewGlyphs)
         {
-            // Get font atlas for preview texture
-            Rect[] rects;
-            ImageProcessing.CreateFontAtlas(fntFile, BackgroundColor, TextColor, out fontPreviewTexture, out rects);
-            fontPreviewTexture.filterMode = this.TextureFilterMode;
+            // Exit if texture not present
+            if (previewGlyphs.Length == 0)
+            {
+                Debug.Log("Font glyphs are not loaded,cannot render preview.");
+                return;
+            }
 
-            // Update last settings
-            lastBackgroundColor = BackgroundColor;
-            lastTextColor = TextColor;
-            lastFilterMode = TextureFilterMode;
+            glyphArea.Clear();
+
+            foreach (Texture2D glyph in previewGlyphs)
+            {
+                Image glyphImage = new Image()
+                {
+                    image = glyph
+                };
+
+                // TODO: Move to stylesheet when layout goes XML, make flexible
+                // TODO: Add zoom control like the Project panel has
+                glyphImage.style.width = 16;
+                glyphImage.style.height = 16;
+                glyphArea.Add(glyphImage);
+
+            }
+
+        }
+
+        private void GenerateFont()
+        {
+            Texture2D fontAtlas;
+            if (SaveFontTextureAsset(selectedFilename, out fontAtlas))
+            {
+                SaveOtherFontAssets(selectedFilename, fontAtlas, out _, out _);
+                //ImportFontSettings(fntFile,font, fontRects, CharacterSpacing);
+            }
         }
 
         #endregion
 
         #region Font Saving
 
-        bool SaveFontTextureAsset(string fontName, out Texture2D fontAtlas, out Rect[] fontRects)
+        bool SaveFontTextureAsset(string fontName, out Texture2D fontAtlas)
         {
-            string assetPath = Path.Combine(ResourcesPath, fontName);
+            string assetPath = Path.Combine(outputPath, fontName);
             string filePath = assetPath + ".png";
 
             // Get font atlas
-            ImageProcessing.CreateFontAtlas(fntFile, BackgroundColor, TextColor, out fontAtlas, out fontRects);
+            ImageProcessing.CreateFontAtlas(fontLoader, backgroundColor, textColor, out fontAtlas, out _);
 
             // Save atlas texture
             byte[] fontAtlasPNG = fontAtlas.EncodeToPNG();
@@ -216,7 +374,7 @@ namespace DaggerfallWorkshop
             importer.mipmapEnabled = false;
             importer.isReadable = false;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
-            importer.filterMode = this.TextureFilterMode;
+            importer.filterMode = filterMode;
 
             // Reimport asset with new importer settings
             AssetDatabase.ImportAsset(assetTexturePath, ImportAssetOptions.ForceUpdate);
@@ -230,7 +388,7 @@ namespace DaggerfallWorkshop
 
         void SaveOtherFontAssets(string fontName, Texture2D fontAtlas, out Font fontOut, out Material materialOut)
         {
-            string assetPath = Path.Combine(ResourcesPath, fontName);
+            string assetPath = Path.Combine(outputPath, fontName);
             string fontPath = assetPath + ".fontsettings";
             string materialPath = assetPath + ".mat";
 
@@ -242,6 +400,10 @@ namespace DaggerfallWorkshop
             AssetDatabase.CreateAsset(materialOut, materialPath);
             fontOut.material = materialOut;
         }
+
+        #endregion
+
+        #region Incomplete Code from Daggerfall Unity
 
         //public void ImportFontSettings(FntFile fntFile, Font font, Rect[] fontRects, int spacing)
         //{
@@ -275,16 +437,17 @@ namespace DaggerfallWorkshop
         //    font.characterInfo = infoList.ToArray();
         //}
 
-        public void SetAsciiStartOffset(Font font, int asciiStartOffset)
-        {
-            Editor editor = Editor.CreateEditor(font);
+        // private void SetAsciiStartOffset(Font font, int asciiStartOffset)
+        // {
+        //     Editor editor = Editor.CreateEditor(font);
 
-            SerializedProperty startOffsetProperty = editor.serializedObject.FindProperty("m_AsciiStartOffset");
-            startOffsetProperty.intValue = asciiStartOffset;
+        //     SerializedProperty startOffsetProperty = editor.serializedObject.FindProperty("m_AsciiStartOffset");
+        //     startOffsetProperty.intValue = asciiStartOffset;
 
-            editor.serializedObject.ApplyModifiedProperties();
-        }
+        //     editor.serializedObject.ApplyModifiedProperties();
+        // }
 
         #endregion
+
     }
 }

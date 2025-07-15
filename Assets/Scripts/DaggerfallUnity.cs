@@ -13,13 +13,8 @@
 using UnityEditor;
 #endif
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using DaggerfallConnect;
-using DaggerfallConnect.Arena2;
-using DaggerfallConnect.Utility;
 using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Items;
@@ -76,7 +71,7 @@ namespace DaggerfallWorkshop
         public string CityImporter_CityName = "Daggerfall/Daggerfall";
         public string Experimental_CityLayoutName = "Daggerfall/Aldcart";
         public string DungeonImporter_DungeonName = "Daggerfall/Privateer's Hold";
-
+        
         // Performance options
         public bool Option_SetStaticFlags = true;
         public bool Option_CombineRMB = true;

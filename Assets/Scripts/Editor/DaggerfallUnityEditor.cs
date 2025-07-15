@@ -12,12 +12,7 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DaggerfallConnect;
-using DaggerfallConnect.Arena2;
-using DaggerfallConnect.InternalTypes;
-using DaggerfallConnect.Utility;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Utility;
 
@@ -73,8 +68,16 @@ namespace DaggerfallWorkshop
             // Update
             dfUnity.EditorUpdate();
 
-#if UNITY_EDITOR_LINUX
             // TODO: Try and find a better solution. Move this to editor settings?
+
+            // TODO: Port to Unity UI
+            // The IMGUI version of this *nearly* works in Unity for Linux 2019.4.40f1.
+            // Code executes as expected, then an error is thrown inside the IMGUI code.
+            // Doesn't seem to affect anything for us at first glance, but rather than
+            // risking it I'm going to leave this in place for now, then either remove it
+            // if the code goes to editor settings as per above, or port it to Unity UI
+            // to work properly cross-platform, or both.
+#if UNITY_EDITOR_LINUX
             string message = string.Empty;
             message += "Linux users please set your xNgine game asset path installation path in Resources/defaults.ini then click 'Update Path' below.";
             message += " This is a temporary limitation to work around Inspector bugs in experimental Linux build.";
@@ -138,6 +141,7 @@ namespace DaggerfallWorkshop
         private void DisplayOptionsGUI()
         {
             EditorGUILayout.Space();
+
             ShowOptionsFoldout = GUILayoutHelper.Foldout(ShowOptionsFoldout, new GUIContent("Options"), () =>
             {
                 // Performance options

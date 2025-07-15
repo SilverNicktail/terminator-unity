@@ -6,6 +6,8 @@
 #region Using Statements
 using Bethesda;
 using System.IO;
+using System.Linq;
+using UnityEngine;
 #endregion
 
 namespace TerminatorUnity.Asset
@@ -18,6 +20,8 @@ namespace TerminatorUnity.Asset
     {
 
         #region Filename Constants
+
+        private const string fontSearchPattern = "FONT????.FNT";
 
         private const string textureSearchPattern = "TEXTURE.???";
 
@@ -41,6 +45,8 @@ namespace TerminatorUnity.Asset
 
         #region Minimums
 
+        private const int minFontCount = 4;
+
         private const int minTextureCount = 472;
 
         private const int minVidCount = 17;
@@ -50,6 +56,8 @@ namespace TerminatorUnity.Asset
         #region Detected
 
         private string path;
+
+        private string[] fontFiles = { };
 
         private string[] textureFiles = { };
 
@@ -97,6 +105,7 @@ namespace TerminatorUnity.Asset
             }
 
             // Check for files
+            this.fontFiles = Directory.GetFiles(path, fontSearchPattern);
             this.textureFiles = Directory.GetFiles(path, textureSearchPattern);
             this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
@@ -116,6 +125,7 @@ namespace TerminatorUnity.Asset
             this.hasAltVids = UnityEngine.Resources.Load(vidAlternateTestFile) != null;
 
             return
+                this.fontFiles.Length >= minFontCount &&
                 this.textureFiles.Length >= minTextureCount &&
                 (!requireVideos || this.videoFiles.Length >= minVidCount || this.hasAltVids) &&
                 (this.hasMapBlocks || this.hasAltBlocks) &&
@@ -138,6 +148,16 @@ namespace TerminatorUnity.Asset
         public string GetPath()
         {
             return path;
+        }
+
+        // TODO: Encapsulate file loading/paths?
+        // Having other items need to load the actual files is breaking
+        // encapsulation so maybe the folder class should just hand back the 
+        // actual files on request?
+
+        public string[] GetFontFilepaths()
+        {
+            return this.fontFiles;
         }
 
         public string[] GetTextureFilepaths()

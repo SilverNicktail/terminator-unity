@@ -50,7 +50,7 @@ namespace TerminatorUnity.Asset {
                 Debug.Log("Empty path was handed to folder detection, skipping.");
                 return null;
             }
-            
+
             // Case sensitivity depends on target filesystem
             // Insensitive on Windows, sensitive on Linux, etc
             // C# doesn't provide a way to check case-insensitively that I know of,

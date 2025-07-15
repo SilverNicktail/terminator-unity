@@ -4,6 +4,7 @@ using System.Collections;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect.Utility;
+using System.Linq;
 
 namespace DaggerfallWorkshop.Utility
 {
@@ -917,51 +918,83 @@ namespace DaggerfallWorkshop.Utility
 
         #region Fonts
 
-        // Gets fixed-width glyph data from FntFile as Color32 array
-        public static Color32[] GetGlyphColors(FntFile fntFile, int index, Color backColor, Color textColor, out Rect sizeOut)
+        /// <summary>
+        /// Retrieves fixed-width pixel data for a glyph in an xNgine font
+        /// file and applies the requested foreground/background colors to each
+        /// pixel. FG/BG are decided based on a simple on/off selection of whether
+        /// character data is present. No smoothing/aliasing is provided.
+        /// </summary>
+        /// <param name="fntFile">Loaded font file to process</param>
+        /// <param name="index">The index of the glyph to process</param>
+        /// <param name="backColor">Background color to apply to the pixel data</param>
+        /// <param name="textColor">Stroke colour to apply to the pixel data</param>
+        /// <param name="sizeOut">Size information for the glyph (used when constructing an atlas)</param>
+        /// <param name="invertY">Whether to flip the raw pixel data right-side up</param>
+        /// <returns>Array of fixed-width pixel data for the glyph with colors applied</returns>
+        public static Color32[] GetFixedWidthGlyphColors(FntFile fntFile, int index, Color backColor, Color textColor, out Rect sizeOut, bool invertY = false)
         {
             // Get actual glyph rect
             sizeOut = new Rect(0, 0, fntFile.GetGlyphWidth(index), fntFile.FixedHeight);
 
             // Get glyph byte data as color array
             byte[] data = fntFile.GetGlyphPixels(index);
-            Color32[] colors = new Color32[data.Length];
-            for (int y = 0; y < FntFile.GlyphFixedDimension; y++)
-            {
-                for (int x = 0; x < FntFile.GlyphFixedDimension; x++)
-                {
-                    int pos = y * FntFile.GlyphFixedDimension + x;
-                    colors[pos] = (data[pos] > 0) ? textColor : backColor;
-                }
-            }
 
-            return colors;
+            return ApplyGlyphColors(data, FntFile.GlyphFixedDimension, FntFile.GlyphFixedDimension, backColor, textColor, invertY);            
         }
 
-        // Gets proportial-width glyph data from FntFile as Color32 array
+        /// <summary>
+        /// Retrieves variable-width pixel data for a glyph in an xNgine font
+        /// file and applies the requested foreground/background colors to each
+        /// pixel. FG/BG are decided based on a simple on/off selection of whether
+        /// character data is present. No smoothing/aliasing is provided.
+        /// </summary>
+        /// <param name="fntFile">Loaded font file to process</param>
+        /// <param name="index">The index of the glyph to process</param>
+        /// <param name="backColor">Background color to apply to the pixel data</param>
+        /// <param name="textColor">Stroke colour to apply to the pixel data</param>
+        /// <param name="invertY">Whether to flip the raw pixel data right-side up</param>
+        /// <returns>Array of variable-width pixel data for the glyph with colors applied</returns>
         public static Color32[] GetProportionalGlyphColors(FntFile fntFile, int index, Color backColor, Color textColor, bool invertY = false)
         {
             // Get actual glyph dimensions
             int width = fntFile.GetGlyphWidth(index);
             int height = fntFile.FixedHeight;
-            Color32[] colors = new Color32[width * height];
 
             // Get glyph byte data as color array
             byte[] data = fntFile.GetGlyphPixels(index);
-            for (int y = 0; y < height; y++)
+
+            return ApplyGlyphColors(data, width, height, backColor, textColor, invertY);
+        }
+
+        private static Color32[] ApplyGlyphColors(byte[] pixelData, int glyphWidth, int glyphHeight,
+                                                  Color backColor, Color textColor, bool invertY = false)
+        {
+            Color32[] colors = new Color32[glyphWidth * glyphHeight];
+
+            // Get glyph byte data as color array
+            for (int y = 0; y < glyphHeight; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < glyphWidth; x++)
                 {
                     int srcPos = y * FntFile.GlyphFixedDimension + x;
-                    int dstPos = (invertY) ? (height - 1 - y) * width + x : y * width + x;
-                    colors[dstPos] = (data[srcPos] > 0) ? textColor : backColor;
+                    int dstPos = invertY ? (glyphHeight - 1 - y) * glyphWidth + x : y * glyphWidth + x;
+                    colors[dstPos] = (pixelData[srcPos] > 0) ? textColor : backColor;
                 }
             }
 
             return colors;
+            
         }
 
-        // Creates a font atlas from FntFile
+        /// <summary>
+        /// Creates a font atlas (single texture and rect definitions) from
+        /// an xNgine font file.
+        /// </summary>
+        /// <param name="fntFile">Loaded FNT file to process</param>
+        /// <param name="backColor">Background colour of glyphs</param>
+        /// <param name="textColor">Stroke colour of glyphs</param>
+        /// <param name="atlasTextureOut">Generated texture file</param>
+        /// <param name="atlasRectsOut">Generated rect defintions for locating glyphs inside texture</param>
         public static void CreateFontAtlas(FntFile fntFile, Color backColor, Color textColor, out Texture2D atlasTextureOut, out Rect[] atlasRectsOut)
         {
             const int atlasDim = 256;
@@ -976,7 +1009,7 @@ namespace DaggerfallWorkshop.Utility
             {
                 // Get glyph colors
                 Rect rect;
-                Color32[] glyphColors = GetGlyphColors(fntFile, i, backColor, textColor, out rect);
+                Color32[] glyphColors = GetFixedWidthGlyphColors(fntFile, i, backColor, textColor, out rect);
 
                 // Offset pixel rect
                 rect.x += xpos;
@@ -1018,6 +1051,36 @@ namespace DaggerfallWorkshop.Utility
             // Create texture from colors array
             atlasTextureOut = MakeTexture2D(ref atlasColors, atlasDim, atlasDim, TextureFormat.ARGB32, false);
             atlasRectsOut = rects;
+        }
+
+        public static Texture2D[] CreateFixedWidthGlyphArray(
+            FntFile fontFile, Color bgColor, Color textColor, FilterMode textureFilter = FilterMode.Bilinear)
+        {
+            // TODO: Switch to Texture2DArray or provide an option
+            // All glyphs are fixed width in this method so a texture array will work
+            Texture2D[] glyphArray = new Texture2D[FntFile.MaxGlyphCount];
+
+            for (int x = 0; x < FntFile.MaxGlyphCount; x++)
+            {
+                Color32[] glyphPixelData = GetFixedWidthGlyphColors(fontFile, x, bgColor, textColor, out _, true);
+
+                if (glyphPixelData.Length == 0)
+                {
+                    Debug.Log($"Glyph at index {x} returned no pixel data, skipping");
+                    continue;
+                }
+
+                Texture2D glyphTexture = MakeTexture2D(
+                    ref glyphPixelData,
+                    FntFile.GlyphFixedDimension,
+                    FntFile.GlyphFixedDimension,
+                    TextureFormat.ARGB32,
+                    false);
+                glyphTexture.filterMode = textureFilter;
+                glyphArray.SetValue(glyphTexture, x);
+            }
+
+            return glyphArray;
         }
 
         #endregion

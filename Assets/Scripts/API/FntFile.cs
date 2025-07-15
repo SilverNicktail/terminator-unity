@@ -142,24 +142,12 @@ namespace DaggerfallConnect.Arena2
         /// <returns>True if successful, otherwise false.</returns>
         public bool Load(string filePath, FileUsage usage, bool readOnly)
         {
-            const string prefix = "FONT000";
-            const string suffix = ".FNT";
+            // TODO: Add exception handling, "false" isn't enough
 
-            // Validate filename
-            string fileName = Path.GetFileName(filePath);
-            if (!fileName.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase) ||
-                !fileName.EndsWith(suffix, StringComparison.InvariantCultureIgnoreCase))
-                return false;
-
-            // Load file
             if (!managedFile.Load(filePath, usage, readOnly))
                 return false;
 
-            // Read file
-            if (!Read())
-                return false;
-
-            return true;
+            return Read();
         }
 
         /// <summary>

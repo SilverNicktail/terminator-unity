@@ -36,6 +36,10 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+# Unity UI Toolkit schema files
+# Can be downloaded in the Unity Editor
+/UIElementsSchema/
+
 # DaggerfallUnity logs
 /Assets/DFTFU_Environment.log
 /Assets/DFTFU_Environment.log.meta
