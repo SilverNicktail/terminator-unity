@@ -34,12 +34,13 @@ well, but for the initial work I will focus on Future Shock (while leaving space
 The primary goals of the project are:
 
 * Seamless gameplay on modern Windows and Linux systems (I do not have Mac to test)
+* Improved native resolution
 * Widescreen support
-* Controller support
-* Improved resolution
+* Controller support, for heathens
 * Improved enemy AI/pathfinding (the original's is pretty rubbish, let's be honest)
 * Accessibility enhancements where appropriate
 * Translation support
+* Improved audio balancing, perhaps even a replacement SFX pack
 * Integration with RetroAchievements or similar
 * Some form of cloud save integration
 
@@ -50,8 +51,8 @@ freeze mid-explosion.
 * Some level edges have incorrectly placed invisible walls that allow the player to get permanently stuck.
 * (If SkyNET is integrated) The "Twisted Ankle" bug, where sliding down even small slopes can result in massive health
 loss when reaching the end.
-* (If SkyNET is integrated) Game-breaking bug where a mission-critical target cannot be killed if running Future Shock
-in SkyNET's enhanced mode.
+* (If SkyNET is integrated) Game-breaking bug where a mission-critical human target cannot be killed if running Future 
+Shock in SkyNET's enhanced mode.
 
 ## Development Notes
 
