@@ -83,7 +83,7 @@ namespace DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings
 
         #region Unity
 
-        [MenuItem("Daggerfall Tools/Mod Settings")]
+        [MenuItem("XnGine/Daggerfall/Mod Settings")]
         static void Init()
         {
             var window = GetWindow<ModSettingsEditorWindow>();

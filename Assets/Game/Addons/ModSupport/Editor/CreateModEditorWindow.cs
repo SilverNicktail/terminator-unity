@@ -32,7 +32,7 @@ namespace DaggerfallWorkshop.Game.Utility.ModSupport
     {
 
         const string windowTitle = "Mod Builder";
-        const string menuPath = "Daggerfall Tools/Mod Builder";
+        const string menuPath = "XnGine/Daggerfall/Mod Builder";
 
         static string currentFilePath = "";
         static string modOutPutPath = "";

@@ -29,7 +29,7 @@ namespace DaggerfallWorkshop
     {
 
         const string windowTitle = "Font Exporter";
-        const string menuPath = "Daggerfall Tools/Font Exporter [Beta]";
+        const string menuPath = "XnGine/Font Exporter [Beta]";
 
         DaggerfallUnity dfUnity;
         FntFile fontLoader = new FntFile();

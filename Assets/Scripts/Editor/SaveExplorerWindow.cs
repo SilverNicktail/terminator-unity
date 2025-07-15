@@ -32,7 +32,7 @@ namespace DaggerfallWorkshop
     public class SaveExplorerWindow : EditorWindow
     {
         const string windowTitle = "Save Explorer";
-        const string menuPath = "Daggerfall Tools/Save Explorer [Beta]";
+        const string menuPath = "XnGine/Daggerfall/Save Explorer [Beta]";
 
         DaggerfallUnity dfUnity;
         ItemHelper itemHelper;

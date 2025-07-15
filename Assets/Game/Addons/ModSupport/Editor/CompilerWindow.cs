@@ -21,7 +21,7 @@ namespace DaggerfallWorkshop.Game.Utility
     public class CompilerWindow : EditorWindow
     {
         const string windowTitle = "Compiler";
-        const string menuPath = "Daggerfall Tools/Source Compiler";
+        const string menuPath = "XnGine/Daggerfall/Source Compiler";
         [SerializeField]
         private List<string> filesToCompile;
         [SerializeField]

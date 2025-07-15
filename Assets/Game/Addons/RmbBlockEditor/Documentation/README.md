@@ -19,7 +19,7 @@ To get started with the editor, first you need to dump some RMB blocks from the 
 
 For more info look at the forum post by Hazelnut, linked above.
 
-To get the editor open, start Unity, go to Daggerfall Tools -> RMB Block Editor. It is designed to be docked on the right side of the screen, where the Inspector window is.
+To get the editor open, start Unity, go to XnGine -> Daggerfall -> RMB Block Editor. It is designed to be docked on the right side of the screen, where the Inspector window is.
 
 This editor comes with its own menu on the top. To open an RMB block file go to File -> Open and select the file on your computer. If you chose a valid file, the block will get loaded in the scene.
 

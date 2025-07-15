@@ -41,7 +41,7 @@ namespace DaggerfallWorkshop.Game.Addons.RmbBlockEditor
 
         private readonly PositionUpdater positionUpdater = new PositionUpdater();
 
-        [MenuItem("Daggerfall Tools/RMB Block Editor")]
+        [MenuItem("XnGine/Daggerfall/RMB Block Editor")]
         public static void ShowWindow()
         {
             var window = GetWindow<RmbBlockEditorWindow>();

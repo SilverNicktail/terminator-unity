@@ -34,7 +34,7 @@ namespace DaggerfallWorkshop
     class TextRecordViewerWindow : EditorWindow
     {
         const string windowTitle = "Text Record Viewer";
-        const string menuPath = "Daggerfall Tools/Text Record Viewer";
+        const string menuPath = "XnGine/Daggerfall/Text Record Viewer";
 
         DaggerfallUnity dfUnity;
 

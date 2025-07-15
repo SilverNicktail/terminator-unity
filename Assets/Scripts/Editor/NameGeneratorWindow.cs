@@ -34,7 +34,7 @@ namespace DaggerfallWorkshop
     public class NameGeneratorWindow : EditorWindow
     {
         const string windowTitle = "Name Generator";
-        const string menuPath = "Daggerfall Tools/Name Generator [Beta]";
+        const string menuPath = "XnGine/Daggerfall/Name Generator [Beta]";
 
         DaggerfallUnity dfUnity;
         NameHelper nameHelper;

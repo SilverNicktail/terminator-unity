@@ -35,7 +35,7 @@ namespace DaggerfallWorkshop
         const string magicDef = "MAGIC.DEF";
         const string spellsStd = "SPELLS.STD";
         const string windowTitle = "JSON Exporter";
-        const string menuPath = "Daggerfall Tools/JSON Exporter";
+        const string menuPath = "XnGine/Daggerfall/JSON Exporter";
         const string itemTemplatesFilename = "ItemTemplates.txt";
         const string magicItemTemplatesFilename = "MagicItemTemplates.txt";
         const string startingSpellsFilename = "StartingSpells.txt";

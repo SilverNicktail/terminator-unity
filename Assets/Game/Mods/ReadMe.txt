@@ -4,7 +4,7 @@ Each mod should be in a subfolder with an appropriate name, i.e. Mods/Example.
 The following is an optimal organization of files structure. This is not mandatory but is a good start if you're making your first mod.
 
 ~/<Name>.dfmod.json
-The manifest file for the mod, created with Daggerfall Tools > Mod Builder.
+The manifest file for the mod, created with XnGine > Daggerfall > Mod Builder.
 
 ~/modsettings.json
 ~/modpresets.json

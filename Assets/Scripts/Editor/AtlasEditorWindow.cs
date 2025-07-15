@@ -26,7 +26,7 @@ namespace DaggerfallWorkshop
     public class AtlasEditorWindow : EditorWindow
     {
         const string windowTitle = "Atlas";
-        const string menuPath = "Daggerfall Tools/Atlas";
+        const string menuPath = "XnGine/Daggerfall/Atlas";
 
         [SerializeField]
         int selectedRegion = 0;

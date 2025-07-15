@@ -58,7 +58,7 @@ namespace DaggerfallWorkshop
         [Tooltip("Textures to be included in the array in the given order.")]
         public Texture2D[] Textures;
 
-        [MenuItem("Daggerfall Tools/Texture Array Creator")]
+        [MenuItem("XnGine/Daggerfall/Texture Array Creator")]
         static void CreateWizard()
         {
             DisplayWizard<TextureArrayWizard>("Create Texture Array", "Create", "Add from selection");

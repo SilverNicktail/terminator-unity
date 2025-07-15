@@ -76,7 +76,7 @@ namespace DaggerfallWorkshop.Game.Utility.WorldDataEditor
         ushort newRadius = 100;
         HashSet<int> positionIds = new HashSet<int>();
 
-        [MenuItem("Daggerfall Tools/WorldData Editor")]
+        [MenuItem("XnGine/Daggerfall/WorldData Editor")]
         static void Init()
         {
             WorldDataEditor window = (WorldDataEditor)GetWindow(typeof(WorldDataEditor));

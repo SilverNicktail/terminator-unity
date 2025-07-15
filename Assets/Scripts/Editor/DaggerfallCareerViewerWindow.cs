@@ -28,7 +28,7 @@ namespace DaggerfallWorkshop
     public class DaggerfallClassEditor : EditorWindow
     {
         const string windowTitle = "Career Viewer";
-        const string menuPath = "Daggerfall Tools/Career Viewer";
+        const string menuPath = "XnGine/Daggerfall/Career Viewer";
 
         DaggerfallUnity dfUnity;
         DFCareer selectedCareer;
