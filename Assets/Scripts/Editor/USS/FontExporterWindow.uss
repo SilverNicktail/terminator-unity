@@ -1,0 +1,10 @@
+﻿#fontPreviewScroller .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+#fontPreviewScroller Image {
+    width: 16px;
+    height: 16px;
+}

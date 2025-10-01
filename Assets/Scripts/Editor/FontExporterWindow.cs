@@ -95,14 +95,19 @@ namespace DaggerfallWorkshop
             }
 
             VisualElement root = rootVisualElement;
+            VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/UXML/FontExporterWindow.uxml");
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Editor/USS/FontExporterWindow.uss");
+            VisualElement ui = uiAsset.CloneTree();
 
+            root.name = "fontExporter";
+            root.styleSheets.Add(styleSheet);
+            root.Add(ui);
+
+            
             if (dfUnity.loadedAssetFolder == null)
             {
-                // TODO: Improve layout of this message
-                root.Add(new Label(
-                    "Game asset folder has not been set or is not valid. " +
-                    "Please make sure your asset path is set and correct."
-                ));
+                root.Q<Label>("no-asset-folder").style.display = DisplayStyle.Flex;
+                root.Q<Box>("font-form").style.display = DisplayStyle.None;
                 return;
             }
 
@@ -118,6 +123,7 @@ namespace DaggerfallWorkshop
             filenames.Sort();
             selectedFilename = filenames[0];
 
+            // PopupField also has no UXML in this version, so we get to manually instantiate it
             // TODO: Error if no font files found
             PopupField<string> fontFileField = new PopupField<string>(
                 "Font File", filenames, selectedFilename)
@@ -126,87 +132,24 @@ namespace DaggerfallWorkshop
                 tooltip = "Select a detected font file from the asset folder."
             };
             fontFileField.RegisterValueChangedCallback(OnFontSelectionChange);
-            root.Add(fontFileField);
+            root.Q<VisualElement>("fontFilePlaceholder").Add(fontFileField);
 
-            ColorField bgColor = new ColorField("Background Color")
-            {
-                bindingPath = "backgroundColor",
-                tooltip = "Background color of generated font."
-            };
+            ColorField bgColor = root.Q<ColorField>("backgroundColor");
             bgColor.RegisterValueChangedCallback(OnFontColorChange);
-            root.Add(bgColor);
 
-            ColorField textColor = new ColorField("Text Color")
-            {
-                bindingPath = "textColor",
-                tooltip = "Foreground/stroke color of generated font."
-            };
+            ColorField textColor = root.Q<ColorField>("textColor");
             textColor.RegisterValueChangedCallback(OnFontColorChange);
-            root.Add(textColor);
 
-            Button resetColorButton = new Button()
-            {
-                name = "colorResetButton",
-                text = "Reset Colors",
-                tooltip = "Resets foreground & background colors to defaults."
-            };
+            Button resetColorButton = root.Q<Button>("colorResetButton");
             resetColorButton.clicked += ResetColors;
-            root.Add(resetColorButton);
 
-            EnumField filteringMode = new EnumField("Preview Filtering", filterMode)
-            {
-                bindingPath = "filterMode",
-                tooltip = "Filtering to apply to font preview."
-            };
+            EnumField filteringMode = root.Q<EnumField>("filterMode");
             filteringMode.RegisterValueChangedCallback(OnFilterModeChange);
-            root.Add(filteringMode);
 
-            // TODO: Do we need this?
-            root.Add(new SliderInt("Character Spacing", -1, 4)
-            {
-                bindingPath = "characterSpacing",
-                tooltip = "Number of pixels between characters in generated font."
-            });
+            root.Q<Button>("outputPathButton").clicked += SelectOutputPath;
+            root.Q<Button>("generateButton").clicked += GenerateFont;
 
-            root.Add(new TextField("Output Path")
-            {
-                bindingPath = "outputPath",
-                isReadOnly = true,
-                tooltip = "Location where the generated font will be saved."
-            });
-            Button pathSelector = new Button()
-            {
-                name = "outputPathButton",
-                text = "Select Path",
-                tooltip = "Select the location where the generated font will be saved."
-            };
-            pathSelector.clicked += SelectOutputPath;
-            root.Add(pathSelector);
-
-            Button generateButton = new Button()
-            {
-                name = "generateButton",
-                text = "Generate Custom Font",
-                tooltip = "Generate the custom font file."
-            };
-            generateButton.clicked += GenerateFont;
-            root.Add(generateButton);
-
-            glyphArea = new ScrollView()
-            {
-                name = "fontPreviewScroller",
-                showHorizontal = true,
-                showVertical = true,
-                tooltip = "Font Preview"
-            };
-
-            // TODO: Move styling to USS when layout goes to XML
-            glyphArea.contentContainer.style.flexDirection = FlexDirection.Row;
-            glyphArea.contentContainer.style.flexWrap = Wrap.Wrap;
-            glyphArea.contentContainer.style.paddingTop = new StyleLength(5);
-            glyphArea.contentContainer.style.paddingRight = new StyleLength(5);
-            glyphArea.contentContainer.style.paddingBottom = new StyleLength(5);
-            glyphArea.contentContainer.style.paddingLeft = new StyleLength(5);
+            glyphArea = root.Q<ScrollView>("fontPreviewScroller");
             root.Add(glyphArea);
 
             root.Bind(new SerializedObject(this));
@@ -322,8 +265,6 @@ namespace DaggerfallWorkshop
 
                 // TODO: Move to stylesheet when layout goes XML, make flexible
                 // TODO: Add zoom control like the Project panel has
-                glyphImage.style.width = 16;
-                glyphImage.style.height = 16;
                 glyphArea.Add(glyphImage);
 
             }

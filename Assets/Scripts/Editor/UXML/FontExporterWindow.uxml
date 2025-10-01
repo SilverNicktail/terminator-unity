@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd">
+
+    <Label
+        name="no-asset-folder" style="display: none;"
+        text="Game asset folder has not been set or is not valid. Please make sure your asset path is set and correct." />
+    <Box name="font-form">
+        <VisualElement name="fontFilePlaceholder">
+            <!-- PopupField doesn't support UXML in Unity 2019 so we're going to bind it to this placeholder -->
+        </VisualElement>
+        <editor:ColorField 
+            binding-path="backgroundColor" 
+            label="Background Color"
+            tooltip="Background color of generated font." />
+        <editor:ColorField 
+            binding-path="textColor"
+            label="Text Color"
+            tooltip="Foreground/stroke color of generated font." />
+        <Button 
+            name="colorResetButton" 
+            text="Reset Colors" 
+            tooltip="Resets foreground &amp; background colors to defaults." />
+        <editor:EnumField
+            binding-path="filterMode"
+            name="filterMode"
+            type="UnityEngine.FilterMode, UnityEngine.CoreModule"
+            value="Bilinear"
+            tooltip="Filtering to apply to font preview." />
+        <SliderInt
+            binding-path="characterSpacing"
+            low-value="-1"
+            high-value="4"
+            value="-1"
+            direction="Horizontal"
+            label="Character Spacing"
+            tooltip="Number of pixels between characters in generated font." />
+        <TextField
+            name="outputPath"
+            binding-path="outputPath" 
+            label="Output Path"
+            readonly="true"
+            tooltip="Location where the generated font will be saved." />
+        <Button 
+            name="outputPathButton" 
+            text="Select Path"
+            tooltip="Select the location where the generated font will be saved." />
+        <Button
+            name="generateButton" 
+            text="Generate Custom Font"
+            tooltip="Generate the custom font file." />
+        <ScrollView
+            name="fontPreviewScroller"
+            show-horizontal-scroller="true"
+            show-vertical-scroller="true"
+            tooltip="Font Preview">
+
+        </ScrollView>
+    </Box>
+</UXML>
