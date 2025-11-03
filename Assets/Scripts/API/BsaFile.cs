@@ -111,9 +111,10 @@ namespace DaggerfallConnect.Arena2
         /// <param name="filePath">Absolute path to BSA file.</param>
         /// <param name="usage">Specify if file will be accessed from disk, or loaded into RAM.</param>
         /// <param name="readOnly">File will be read-only if true, read-write if false.</param>
-        public BsaFile(string filePath, FileUsage usage, bool readOnly)
+        /// <param name="typedIndices">Whether BSA dictionary can have non-string indices (original v1 BSA files cannot)</param>
+        public BsaFile(string filePath, FileUsage usage, bool readOnly, bool typedIndices = true)
         {
-            Load(filePath, usage, readOnly);
+            Load(filePath, usage, readOnly, null, typedIndices);
         }
 
         #endregion
@@ -147,8 +148,10 @@ namespace DaggerfallConnect.Arena2
         /// <param name="usage">Specify if file will be accessed from disk, or loaded into RAM.</param>
         /// <param name="readOnly">File will be read-only if true, read-write if false.</param>
         /// <param name="filePatch">An optional list of patches to apply to file memory buffer.</param>
+        /// <param name="typedIndices">Whether BSA dictionary can have non-string indices (original v1 BSA files cannot)</param>
         /// <returns>True if successful, otherwise false.</returns>
-        public bool Load(string filePath, FileUsage usage, bool readOnly, PatchList filePatch = null)
+        /// TODO: Replace boolean return type with exception handling
+        public bool Load(string filePath, FileUsage usage, bool readOnly, PatchList filePatch = null, bool typedIndices = true)
         {
             // Ensure filename ends with .BSA or .SND
             if (!filePath.EndsWith(".BSA", StringComparison.InvariantCultureIgnoreCase) &&
@@ -173,7 +176,7 @@ namespace DaggerfallConnect.Arena2
             }
 
             // Read file
-            if (!Read())
+            if (!Read(typedIndices))
                 return false;
 
             return true;
@@ -347,15 +350,16 @@ namespace DaggerfallConnect.Arena2
         #region Readers
 
         /// <summary>
-        /// Read file.
+        /// Reads BSA file contents.
         /// </summary>
-        private bool Read()
+        /// <param name="typedIndices">Whether BSA dictionary can have non-string indices (original v1 BSA files cannot)</param>
+        private bool Read(bool typedIndices = true)
         {
             try
             {
                 // Step through file
                 BinaryReader reader = managedFile.GetReader();
-                ReadHeader(reader);
+                ReadHeader(reader, typedIndices);
                 ReadDirectory(reader);
             }
             catch (Exception e)
@@ -371,13 +375,21 @@ namespace DaggerfallConnect.Arena2
         /// Read header data.
         /// </summary>
         /// <param name="reader">Reader to stream.</param>
-        private void ReadHeader(BinaryReader reader)
+        /// <param name="typedIndices">Whether the file header should contain a type field</param>
+        private void ReadHeader(BinaryReader reader, bool typedIndices = true)
         {
             reader.BaseStream.Position = 0;
             header.Position = 0;
             header.DirectoryCount = reader.ReadInt16();
-            header.DirectoryType = (DirectoryTypes)reader.ReadUInt16();
+            header.DirectoryType = DirectoryTypes.NameRecord;
             header.FirstRecordPosition = reader.BaseStream.Position;
+            
+            if (typedIndices)
+            {
+                header.DirectoryType = (DirectoryTypes)reader.ReadUInt16();
+                header.FirstRecordPosition = reader.BaseStream.Position;
+            }
+
         }
 
         /// <summary>
