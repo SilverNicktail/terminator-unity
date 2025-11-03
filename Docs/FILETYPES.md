@@ -20,8 +20,8 @@ distinguish between palettes with an attached header and those without.
 
 `FONTxxxx.FNT`
 : Font file, contains glyphs for rendered text. Not documented on Daggerfall wiki but exists in the codebase. Something 
-I can contribute. Future Shock seems to follow the same file format, as the tools inside Unity can already load and 
-display the glyphs, however only the first 5 load. Need to investigate why.
+I can contribute. Future Shock follows the same format and the existing code was able to load the glyphs OK with only 
+some minor tweaks.
 
 `HAZE.000`
 : Currently unknown, potentially related to atmospheric effects? Looking at it in a hex editor, it starts with nulls 
