@@ -58,7 +58,7 @@ there's 17 missions in the game. (The final mission is entirely indoors though, 
 
 Future Shock contains seven:
 
-* `MDMDBRIF.BSA` - Briefing/bestiary data, TBC.
+* [`MDMDBRIF.BSA`](./TEXT.md) - Briefing, in-mission and beastiary text.
 * `MDMDENMS.BSA` - Enemy model data, equivalent of MONSTER.BSA
 * `MDMDIMGS.BSA` - Image data
 * `MDMDMAPS.BSA` - Maps, equivalent of DF's MAPS.BSA
