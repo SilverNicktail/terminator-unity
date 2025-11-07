@@ -1,4 +1,4 @@
-﻿// Project:         Daggerfall Unity
+// Project:         Daggerfall Unity
 // Copyright:       Copyright (C) 2009-2015 Gavin Clayton
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Web Site:        http://www.dfworkshop.net
@@ -85,7 +85,6 @@ namespace DaggerfallWorkshop
 
         // Could argue that this should be split up among other methods but...
         /// https://issuetracker.unity3d.com/issues/creategui-gets-executed-before-awake-and-onenable-when-opening-a-project-with-a-custom-window-already-open
-        /// TODO: Move most of this to XML/CSS
         private void CreateGUI()
         {
 
