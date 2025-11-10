@@ -96,7 +96,7 @@ namespace DaggerfallWorkshop.Utility
 
         public ContentReader(IAssetFolder assetFolder) {
             this.assetFolder = assetFolder;
-            this.arena2Path = assetFolder.GetPath();
+            this.arena2Path = assetFolder.GetRootPath();
             this.SetupReaders();
         }
 

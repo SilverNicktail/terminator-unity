@@ -1,4 +1,5 @@
 using Bethesda;
+using XnGine;
 
 namespace TerminatorUnity.Asset
 {
@@ -16,29 +17,15 @@ namespace TerminatorUnity.Asset
 
         XngineGame GetGame();
 
-        string GetPath();
+        string GetRootPath();
 
         bool FolderValid(bool requireVideos = false);
 
-        string[] GetFontFilepaths();
+        bool ProvidesAssetType(AssetType type);
 
-        string GetBriefingArchivePath();
+        string[] GetAssetPaths(AssetType type);
 
-        string GetEnemyArchivePath();
-
-        string GetImageArchivePath();
-
-        string GetMapArchivePath();
-
-        string GetMapBlockArchivePath();
-
-        string GetModelsArchivePath();
-
-        string GetMusicArchivePath();
-
-        string GetSFXArchivePath();
-
-        string GetWoodsArchivePath();
+        string GetArchivePath(AssetType archiveType);
 
     }
 

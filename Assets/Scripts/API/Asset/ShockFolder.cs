@@ -3,16 +3,13 @@
 
 #region Using Statements
 using System.IO;
+using System.Linq;
 using Bethesda;
+using XnGine;
 #endregion
 
 namespace TerminatorUnity.Asset
 {
-    /// <summary>
-    /// Static methods to validate GAMEDATA folder of a Future Shock disc folder.
-    /// Does not verify contents, just that critical files exist in minimum quantities.
-    /// This allows test to be fast enough to be run at startup.
-    /// </summary>
     public class ShockFolder : IAssetFolder
     {
         #region Filename Constants
@@ -27,9 +24,6 @@ namespace TerminatorUnity.Asset
 
         private const string midiSearchPattern = "*.HMI";
 
-        // In Terminator, no Daggerfall equivalent
-        private const string briefingArchive = "MDMDBRIF.BSA";
-
         // Equivalent of MONSTER.BSA
         private const string enemyArchive = "MDMDENMS.BSA";
 
@@ -38,6 +32,9 @@ namespace TerminatorUnity.Asset
 
         // Equivalent of MAPS.BSA
         private const string mapsArchive = "MDMDMAPS.BSA";
+
+        // In Terminator, no Daggerfall equivalent
+        private const string missionTextArchive = "MDMDBRIF.BSA";
 
         // Equivalent of ARCH3D.BSA - parameterise
         private const string modelArchive = "MDMDOBJS.BSA";
@@ -67,11 +64,11 @@ namespace TerminatorUnity.Asset
 
         private readonly string path;
 
-        private bool hasBriefings = false;
-
         private bool hasEnemies = false;
 
         private bool hasImages = false;
+
+        private bool hasMissionArchive = false;
 
         private bool hasModels = false;
 
@@ -90,6 +87,22 @@ namespace TerminatorUnity.Asset
         private string[] textureFiles = { };
 
         private string[] videoFiles = { };
+
+        private static readonly AssetType[] availableTypes = new AssetType[]
+        {
+            AssetType.ENEMY_MODEL_ARCHIVE,
+            AssetType.FONT,
+            AssetType.HEIGHT_MAP,
+            AssetType.IMAGE_ARCHIVE,
+            AssetType.MAP_ARCHIVE,
+            AssetType.MISSION_ARCHIVE,
+            AssetType.MODEL_ARCHIVE,
+            AssetType.MUSIC,
+            AssetType.MUSIC_ARCHIVE,
+            AssetType.SFX_ARCHIVE,
+            AssetType.TEXTURE,
+            AssetType.VIDEO
+        };
 
         #endregion
 
@@ -123,7 +136,7 @@ namespace TerminatorUnity.Asset
             this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
             // Check for BSAs
-            this.hasBriefings = Directory.GetFiles(path, briefingArchive).Length == 1;
+            this.hasMissionArchive = Directory.GetFiles(path, missionTextArchive).Length == 1;
             this.hasEnemies = Directory.GetFiles(path, enemyArchive).Length == 1;
             this.hasImages = Directory.GetFiles(path, imageArchive).Length == 1;
             this.hasMusicArchive = Directory.GetFiles(path, musicArchive).Length == 1;
@@ -152,79 +165,69 @@ namespace TerminatorUnity.Asset
             return XngineGame.T_FUTURE_SHOCK;
         }
 
-        public string GetPath()
+        public string GetRootPath()
         {
             return this.path;
         }
 
-        public string[] GetTextureFilepaths()
+        public bool ProvidesAssetType(AssetType type)
         {
-            return this.textureFiles;
+            return availableTypes.Contains(type);
         }
 
-        public string[] GetFontFilepaths()
+        public string[] GetAssetPaths(AssetType type)
         {
-            return this.fontFiles;
+            switch (type)
+            {
+                case AssetType.FONT:
+                    return fontFiles;
+                case AssetType.HEIGHT_MAP:
+                    return heightMapFiles;
+                case AssetType.MUSIC:
+                    return musicFiles;
+                case AssetType.TEXTURE:
+                    return textureFiles;
+                case AssetType.VIDEO:
+                    return videoFiles;
+                default:
+                    return null;
+            }
         }
 
-        public string[] GetHeightMapFilepaths()
+        public string GetArchivePath(AssetType assetType)
         {
-            return this.heightMapFiles;
-        }
+            string archiveName = null;
 
-        public string[] GetMusicFilepaths()
-        {
-            return this.musicFiles;
-        }
+            if (assetType == AssetType.ENEMY_MODEL_ARCHIVE && hasEnemies)
+            {
+                archiveName = enemyArchive;
+            }
+            else if (assetType == AssetType.IMAGE_ARCHIVE && hasImages)
+            {
+                archiveName = imageArchive;
+            }
+            else if (assetType == AssetType.MAP_ARCHIVE & hasMaps)
+            {
+                archiveName = mapsArchive;
+            }
+            else if (assetType == AssetType.MISSION_ARCHIVE && hasMissionArchive)
+            {
+                archiveName = missionTextArchive;
+            }
+            else if (assetType == AssetType.MODEL_ARCHIVE && hasModels)
+            {
+                archiveName = modelArchive;
+            }
+            else if (assetType == AssetType.MUSIC_ARCHIVE && hasMusicArchive)
+            {
+                archiveName = musicArchive;
+            }
+            else if (assetType == AssetType.SFX_ARCHIVE && hasSounds)
+            {
+                archiveName = sfxArchive;
+            }
 
-        public string[] GetVideoFilepaths()
-        {
-            return this.videoFiles;
-        }
-
-        public string GetBriefingArchivePath()
-        {
-            return this.hasBriefings ? Path.Combine(this.path, briefingArchive) : null;
-        }
-
-        public string GetEnemyArchivePath()
-        {
-            return this.hasEnemies ? Path.Combine(this.path, enemyArchive) : null;
-        }
-
-        public string GetImageArchivePath()
-        {
-            return this.hasImages ? Path.Combine(this.path, imageArchive) : null;
-        }
-
-        public string GetMusicArchivePath()
-        {
-            return this.hasMusicArchive ? Path.Combine(this.path, musicArchive) : null;
-        }
-
-        public string GetModelsArchivePath()
-        {
-            return this.hasModels ? Path.Combine(this.path, modelArchive) : null;
-        }
-
-        public string GetMapArchivePath()
-        {
-            return this.hasMaps ? Path.Combine(this.path, mapsArchive) : null;
-        }
-
-        public string GetMapBlockArchivePath()
-        {
-            return null; // FS doesn't have map blocks, AFAIK
-        }
-
-        public string GetSFXArchivePath()
-        {
-            return this.hasSounds ? Path.Combine(this.path, sfxArchive) : null;
-        }
-
-        public string GetWoodsArchivePath()
-        {
-            return null;
+            return (archiveName != null) ? Path.Combine(path, archiveName) : null;
         }
 
         #endregion

@@ -113,7 +113,7 @@ namespace DaggerfallWorkshop
             // 2019 version of PopupField can't handle matching custom objects, so we'll
             // feed it filenames and use them as keys in a dictionary for the full path
             // https://discussions.unity.com/t/popupfield-binding-gives-error-field-type-is-not-compatible-with-property/780775
-            fontFilepaths = dfUnity.loadedAssetFolder.GetFontFilepaths().ToDictionary(
+            fontFilepaths = dfUnity.loadedAssetFolder.GetAssetPaths(XnGine.AssetType.FONT).ToDictionary(
                 path => Path.GetFileName(path),
                 path => path
             );

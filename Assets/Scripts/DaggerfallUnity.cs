@@ -347,7 +347,7 @@ namespace DaggerfallWorkshop
             if (assetFolder != null && assetFolder.FolderValid())
             {
                 loadedAssetFolder = assetFolder;
-                Arena2Path = assetFolder.GetPath();
+                Arena2Path = assetFolder.GetRootPath();
                 isReady = true;
                 isPathValidated = assetFolder.FolderValid();
                 LogMessage($"Game asset folder loaded at {Arena2Path}.", true);
@@ -362,7 +362,7 @@ namespace DaggerfallWorkshop
                 }
                 else
                 {
-                    LogMessage($"Asset folder was found at {assetFolder.GetPath()} but is not a valid/supported game folder", true);
+                    LogMessage($"Asset folder was found at {assetFolder.GetRootPath()} but is not a valid/supported game folder", true);
                 }
 
                 // No path was found but we can try to carry on without one

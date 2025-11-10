@@ -7,7 +7,7 @@
 using Bethesda;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+using XnGine;
 #endregion
 
 namespace TerminatorUnity.Asset
@@ -40,6 +40,19 @@ namespace TerminatorUnity.Asset
         private const string sfxArchive = "DAGGER.SND";
 
         private const string woodsArchive = "WOODS.WLD";
+
+        private static readonly AssetType[] availableTypes = new AssetType[]
+        {
+            AssetType.ENEMY_MODEL_ARCHIVE,
+            AssetType.FONT,
+            AssetType.MAP_ARCHIVE,
+            AssetType.MAP_BLOCK_ARCHIVE,
+            AssetType.MODEL_ARCHIVE,
+            AssetType.SFX_ARCHIVE,
+            AssetType.TEXTURE,
+            AssetType.VIDEO,
+            AssetType.WOODS_ARCHIVE
+        };
 
         #endregion
 
@@ -145,9 +158,14 @@ namespace TerminatorUnity.Asset
             return XngineGame.ES_DAGGERFALL;
         }
 
-        public string GetPath()
+        public string GetRootPath()
         {
             return path;
+        }
+
+        public bool ProvidesAssetType(AssetType type)
+        {
+            return availableTypes.Contains(type);
         }
 
         // TODO: Encapsulate file loading/paths?
@@ -155,64 +173,51 @@ namespace TerminatorUnity.Asset
         // encapsulation so maybe the folder class should just hand back the 
         // actual files on request?
 
-        public string[] GetFontFilepaths()
+        public string[] GetAssetPaths(AssetType type)
         {
-            return this.fontFiles;
+            switch (type)
+            {
+                case AssetType.FONT:
+                    return fontFiles;
+                case AssetType.TEXTURE:
+                    return textureFiles;
+                case AssetType.VIDEO:
+                    return videoFiles;
+                default:
+                    return null;
+            }
         }
 
-        public string[] GetTextureFilepaths()
+        public string GetArchivePath(AssetType assetType)
         {
-            return this.textureFiles;
-        }
+            string archiveName = null;
 
-        public string[] GetVideoFilepaths()
-        {
-            return this.videoFiles;
-        }
+            if (assetType == AssetType.ENEMY_MODEL_ARCHIVE && hasEnemies)
+            {
+                archiveName = enemyArchive;
+            }
+            else if (assetType == AssetType.MAP_ARCHIVE && hasMaps)
+            {
+                archiveName = mapsArchive;
+            }
+            else if (assetType == AssetType.MAP_BLOCK_ARCHIVE && hasMapBlocks)
+            {
+                archiveName = mapBlockArchive;
+            }
+            else if (assetType == AssetType.MODEL_ARCHIVE && hasModels)
+            {
+                archiveName = modelArchive;
+            }
+            else if (assetType == AssetType.SFX_ARCHIVE && hasSfx)
+            {
+                archiveName = sfxArchive;
+            }
+            else if (assetType == AssetType.WOODS_ARCHIVE && hasWoods)
+            {
+                archiveName = woodsArchive;
+            }
 
-        public string GetBriefingArchivePath()
-        {
-            return null; // DF doesn't have one
-        }
-
-        public string GetEnemyArchivePath()
-        {
-            return hasEnemies ? Path.Combine(path, enemyArchive) : null;
-        }
-
-        public string GetImageArchivePath()
-        {
-            return null; // DF doesn't have an image archive
-        }
-
-        public string GetMapArchivePath()
-        {
-            return hasMaps ? Path.Combine(path, mapsArchive) : null;
-        }
-
-        public string GetMapBlockArchivePath()
-        {
-            return hasMapBlocks ? Path.Combine(path, mapBlockArchive) : null;
-        }
-
-        public string GetModelsArchivePath()
-        {
-            return hasModels ? Path.Combine(path, modelArchive) : null;
-        }
-
-        public string GetMusicArchivePath()
-        {
-            return null; // DF doesn't have a single music archive
-        }
-
-        public string GetSFXArchivePath()
-        {
-            return hasSfx ? Path.Combine(path, sfxArchive) : null;
-        }
-
-        public string GetWoodsArchivePath()
-        {
-            return hasWoods ? Path.Combine(path, woodsArchive) : null;
+            return (archiveName != null) ? Path.Combine(path, archiveName) : null;
         }
 
         #endregion
