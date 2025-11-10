@@ -1,4 +1,3 @@
-using Bethesda;
 using XnGine;
 
 namespace TerminatorUnity.Asset

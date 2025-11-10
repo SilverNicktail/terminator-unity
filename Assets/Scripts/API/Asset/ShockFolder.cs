@@ -4,7 +4,6 @@
 #region Using Statements
 using System.IO;
 using System.Linq;
-using Bethesda;
 using XnGine;
 #endregion
 

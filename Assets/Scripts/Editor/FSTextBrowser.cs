@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using XnGine;
 
 namespace TerminatorUnity
 {
@@ -38,7 +39,7 @@ namespace TerminatorUnity
         static bool EnableMenuItem()
         {
             IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
-            return loadedFolder == null || loadedFolder.GetGame() == Bethesda.XngineGame.T_FUTURE_SHOCK;
+            return loadedFolder == null || loadedFolder.GetGame() == XngineGame.T_FUTURE_SHOCK;
         }
 
         private void CreateGUI()

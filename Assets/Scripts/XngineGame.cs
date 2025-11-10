@@ -1,4 +1,4 @@
-namespace Bethesda {
+namespace XnGine {
 
     /// <summary>
     /// Useful enumeration of all XnGine games released

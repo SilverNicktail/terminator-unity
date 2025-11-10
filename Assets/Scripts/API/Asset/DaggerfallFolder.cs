@@ -4,7 +4,6 @@
 // Any bugs present were caused by her tail.
 
 #region Using Statements
-using Bethesda;
 using System.IO;
 using System.Linq;
 using XnGine;
