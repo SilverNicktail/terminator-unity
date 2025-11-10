@@ -17,7 +17,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using FullSerializer;
-
+using XnGine;
 
 /*
  * Todo:
@@ -119,6 +119,13 @@ namespace DaggerfallWorkshop.Game.Utility.ModSupport
         {
             CreateModEditorWindow window = (CreateModEditorWindow)EditorWindow.GetWindow(typeof(CreateModEditorWindow));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         public ModInfo ReadModInfoFile(string path)

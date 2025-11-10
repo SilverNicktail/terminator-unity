@@ -14,6 +14,7 @@ using UnityEngine;
 using DaggerfallConnect;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using XnGine;
 
 namespace DaggerfallWorkshop.Game.Addons.RmbBlockEditor
 {
@@ -22,6 +23,7 @@ namespace DaggerfallWorkshop.Game.Addons.RmbBlockEditor
     /// </summary>
     public class RmbBlockEditorWindow : EditorWindow
     {
+        private const string menuPath = "XnGine/Daggerfall/RMB Block Editor";
         private const string WorldDataFolder = "/StreamingAssets/WorldData/";
         private GameObject root;
         private GameObject light;
@@ -41,11 +43,18 @@ namespace DaggerfallWorkshop.Game.Addons.RmbBlockEditor
 
         private readonly PositionUpdater positionUpdater = new PositionUpdater();
 
-        [MenuItem("XnGine/Daggerfall/RMB Block Editor")]
+        [MenuItem(menuPath)]
         public static void ShowWindow()
         {
             var window = GetWindow<RmbBlockEditorWindow>();
             window.titleContent = new GUIContent("RMB Block Editor");
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         private void OnEnable()

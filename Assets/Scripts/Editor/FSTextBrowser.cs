@@ -38,7 +38,7 @@ namespace TerminatorUnity.Editor
         static bool EnableMenuItem()
         {
             IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
-            return loadedFolder == null || loadedFolder.GetGame() == XngineGame.T_FUTURE_SHOCK;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.T_FUTURE_SHOCK;
         }
 
         private void CreateGUI()

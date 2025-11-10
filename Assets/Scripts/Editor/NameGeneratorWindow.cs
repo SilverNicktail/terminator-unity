@@ -11,20 +11,10 @@
 
 using UnityEngine;
 using UnityEditor;
-using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
-using DaggerfallWorkshop.Utility;
-using DaggerfallWorkshop.Game.Player;
-using DaggerfallWorkshop.Game.Items;
-using DaggerfallConnect;
-using DaggerfallConnect.Arena2;
-using DaggerfallConnect.Save;
-using DaggerfallConnect.Utility;
-using DaggerfallConnect.FallExe;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Entity;
+using XnGine;
 
 namespace DaggerfallWorkshop
 {
@@ -51,6 +41,13 @@ namespace DaggerfallWorkshop
         {
             NameGeneratorWindow window = (NameGeneratorWindow)EditorWindow.GetWindow(typeof(NameGeneratorWindow));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         void OnGUI()

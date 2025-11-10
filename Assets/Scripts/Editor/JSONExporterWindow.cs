@@ -20,6 +20,7 @@ using DaggerfallConnect.Utility;
 using DaggerfallConnect.Save;
 using DaggerfallWorkshop.Game.Serialization;
 using DaggerfallWorkshop.Utility;
+using XnGine;
 
 namespace DaggerfallWorkshop
 {
@@ -47,6 +48,13 @@ namespace DaggerfallWorkshop
         {
             JSONExporterWindow window = (JSONExporterWindow)EditorWindow.GetWindow(typeof(JSONExporterWindow));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         void OnGUI()
@@ -185,7 +193,7 @@ namespace DaggerfallWorkshop
 
                     // Barbarian has !Nux Vomica (a poison) in their starting spell list? - skipping for now
                     if (spellRecordData.spellName.StartsWith("!"))
-                            continue;
+                        continue;
 
                     StartingSpell spellItem = new StartingSpell()
                     {

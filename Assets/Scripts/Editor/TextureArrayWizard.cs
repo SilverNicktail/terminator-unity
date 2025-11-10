@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using DaggerfallWorkshop.Utility;
+using XnGine;
 
 namespace DaggerfallWorkshop
 {
@@ -43,6 +43,8 @@ namespace DaggerfallWorkshop
     /// </summary>
     public sealed class TextureArrayWizard : ScriptableWizard
     {
+        private const string menuPath = "XnGine/Daggerfall/Texture Array Creator";
+        
         [Tooltip("The directory where the texture array is created.")]
         public string Directory;
 
@@ -58,10 +60,17 @@ namespace DaggerfallWorkshop
         [Tooltip("Textures to be included in the array in the given order.")]
         public Texture2D[] Textures;
 
-        [MenuItem("XnGine/Daggerfall/Texture Array Creator")]
+        [MenuItem(menuPath)]
         static void CreateWizard()
         {
             DisplayWizard<TextureArrayWizard>("Create Texture Array", "Create", "Add from selection");
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         void OnWizardCreate()

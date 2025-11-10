@@ -16,17 +16,21 @@ using System.Text;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
+using XnGine;
 
 namespace DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings
 {
     public class ModSettingsEditorWindow : EditorWindow
     {
+
+        const string menuPath = "XnGine/Daggerfall/Mod Settings";
+
         #region Prefs
 
         private static class Prefs
         {
-            public const string SaveOnExit      = "ModSettings_SaveOnExit";
-            public const string CurrentTarget   = "ModSettings_CurrentTarget";
+            public const string SaveOnExit = "ModSettings_SaveOnExit";
+            public const string CurrentTarget = "ModSettings_CurrentTarget";
         }
 
         #endregion
@@ -83,11 +87,18 @@ namespace DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings
 
         #region Unity
 
-        [MenuItem("XnGine/Daggerfall/Mod Settings")]
+        [MenuItem(menuPath)]
         static void Init()
         {
             var window = GetWindow<ModSettingsEditorWindow>();
             window.titleContent = new GUIContent("Mod Settings", (Texture2D)EditorGUIUtility.Load("icons/SettingsIcon.png"));
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         private void OnEnable()

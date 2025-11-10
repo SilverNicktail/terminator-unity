@@ -13,7 +13,7 @@ using UnityEngine;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
 using DaggerfallWorkshop.Utility.AssetInjection;
-using DaggerfallWorkshop.Utility;
+using XnGine;
 
 namespace DaggerfallWorkshop.Game.Utility.WorldDataEditor
 {
@@ -22,6 +22,7 @@ namespace DaggerfallWorkshop.Game.Utility.WorldDataEditor
     /// </summary>
     public class WorldDataEditor : EditorWindow
     {
+        private const string menuPath = "XnGine/Daggerfall/WorldData Editor";
         public const string WorldDataFolder = "/StreamingAssets/WorldData/";
         private GUIStyle lightBG = new GUIStyle();
         private GUIStyle lightMedBG = new GUIStyle();
@@ -76,11 +77,18 @@ namespace DaggerfallWorkshop.Game.Utility.WorldDataEditor
         ushort newRadius = 100;
         HashSet<int> positionIds = new HashSet<int>();
 
-        [MenuItem("XnGine/Daggerfall/WorldData Editor")]
+        [MenuItem(menuPath)]
         static void Init()
         {
             WorldDataEditor window = (WorldDataEditor)GetWindow(typeof(WorldDataEditor));
             window.titleContent = new GUIContent("WorldData Editor");
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         private void Awake()

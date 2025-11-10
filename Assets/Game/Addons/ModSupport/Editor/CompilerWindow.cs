@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
+using XnGine;
 
 namespace DaggerfallWorkshop.Game.Utility
 {
@@ -49,6 +50,13 @@ namespace DaggerfallWorkshop.Game.Utility
         {
             CompilerWindow window = (CompilerWindow)EditorWindow.GetWindow(typeof(CompilerWindow));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         void OnGUI()

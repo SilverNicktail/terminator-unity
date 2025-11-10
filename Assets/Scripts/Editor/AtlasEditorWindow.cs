@@ -12,11 +12,10 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using DaggerfallWorkshop.Utility;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
+using XnGine;
 
 namespace DaggerfallWorkshop
 {
@@ -56,6 +55,13 @@ namespace DaggerfallWorkshop
         {
             AtlasEditorWindow window = (AtlasEditorWindow)EditorWindow.GetWindow(typeof(AtlasEditorWindow));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.GetGame() == XngineGame.ES_DAGGERFALL;
         }
 
         void OnGUI()
