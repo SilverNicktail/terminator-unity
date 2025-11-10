@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using XnGine;
 
-namespace TerminatorUnity
+namespace TerminatorUnity.Editor
 {
     public class FSTextBrowser : EditorWindow
     {
