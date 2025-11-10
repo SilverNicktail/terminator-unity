@@ -15,7 +15,7 @@ using System.IO;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
 using System;
-using TerminatorUnity.Asset;
+using XnGine;
 
 namespace DaggerfallWorkshop.Utility
 {

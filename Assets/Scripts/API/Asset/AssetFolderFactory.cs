@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using XnGine;
 
-namespace TerminatorUnity.Asset {
+using DaggerfallWorkshop.Asset;
+using TerminatorUnity.Asset;
 
-    static class AssetFolderFactory {
+namespace XnGine
+{
+
+    static class AssetFolderFactory
+    {
 
         // List of asset folder names for each game
         private static readonly Dictionary<XngineGame, string> folderNames =
@@ -24,26 +28,31 @@ namespace TerminatorUnity.Asset {
                 {XngineGame.T_FUTURE_SHOCK, new List<string> {"MDMDBRIF.BSA", "SHOCK.COL"}}
             };
 
-        public static IAssetFolder LocateAssetFolder(string[] potentialPaths) {
+        public static IAssetFolder LocateAssetFolder(string[] potentialPaths)
+        {
 
-            foreach (string path in potentialPaths) {
-                if (path == null || path.Length == 0) {
+            foreach (string path in potentialPaths)
+            {
+                if (path == null || path.Length == 0)
+                {
                     continue;
                 }
 
                 IAssetFolder attemptPath = DetectAssetFolderType(path);
-                if (attemptPath != null) {
+                if (attemptPath != null)
+                {
                     return attemptPath;
                 }
             }
-            
+
             return null;
         }
 
 
         // Does basic checks on folder contents to recognise which game they belong to
         // More advanced checks will be done by the asset folder implementation
-        public static IAssetFolder DetectAssetFolderType(string path) {
+        public static IAssetFolder DetectAssetFolderType(string path)
+        {
 
             if (path == null || path.Trim().Length == 0)
             {
@@ -62,39 +71,50 @@ namespace TerminatorUnity.Asset {
             Debug.Log($"Checking asset folder at {path}");
 
             // User has selected parent folder
-            foreach (KeyValuePair<XngineGame, string> folder in folderNames) {
+            foreach (KeyValuePair<XngineGame, string> folder in folderNames)
+            {
 
                 string pathRegular = Path.Combine(path, folder.Value);
                 string pathLower = Path.Combine(path, folder.Value.ToLower());
                 string pathUpper = Path.Combine(path, folder.Value.ToUpper());
-                
-                if (Directory.Exists(pathRegular)) {
+
+                if (Directory.Exists(pathRegular))
+                {
                     detectedPath = pathRegular;
-                } else if (Directory.Exists(pathLower)) {
+                }
+                else if (Directory.Exists(pathLower))
+                {
                     detectedPath = pathLower;
-                } else if (Directory.Exists(pathUpper)) {
+                }
+                else if (Directory.Exists(pathUpper))
+                {
                     detectedPath = pathUpper;
                 }
 
-                if (detectedPath != null) {
+                if (detectedPath != null)
+                {
                     detectedGame = folder.Key;
                     break;
                 }
 
             }
 
-            if (detectedPath == null) {
+            if (detectedPath == null)
+            {
 
                 // User has selected asset folder directly
-                foreach (KeyValuePair<XngineGame, List<string>> contents in folderContents) {
+                foreach (KeyValuePair<XngineGame, List<string>> contents in folderContents)
+                {
                     bool allPresent = true;
 
-                    foreach (string targetFile in contents.Value) {
+                    foreach (string targetFile in contents.Value)
+                    {
                         string fullPath = Path.Combine(path, targetFile);
                         allPresent = allPresent && Directory.Exists(fullPath);
                     }
 
-                    if (allPresent) {
+                    if (allPresent)
+                    {
                         detectedPath = path;
                         detectedGame = contents.Key;
                     }
@@ -102,19 +122,24 @@ namespace TerminatorUnity.Asset {
 
             }
 
-            if (detectedPath != null) {
+            if (detectedPath != null)
+            {
                 Debug.Log($"Detected asset folder for {detectedGame} at {detectedPath}");
                 return LoadAssetFolder(detectedGame, detectedPath);
-            } else {
+            }
+            else
+            {
                 Debug.Log($"Could not find valid asset folder at or within {detectedPath}");
                 return null;
             }
 
         }
 
-        private static IAssetFolder LoadAssetFolder(XngineGame gameType, string path) {
+        private static IAssetFolder LoadAssetFolder(XngineGame gameType, string path)
+        {
 
-            switch (gameType) {
+            switch (gameType)
+            {
                 case XngineGame.ES_DAGGERFALL:
                     return new DaggerfallFolder(path);
 

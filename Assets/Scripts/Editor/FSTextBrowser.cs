@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DaggerfallWorkshop;
-using TerminatorUnity.Asset;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -67,7 +66,7 @@ namespace TerminatorUnity
 
             // TODO: Have assset folder interface return available text archives
             this.textFile = new FSTextFile(
-                dfUnity.loadedAssetFolder.GetArchivePath(XnGine.AssetType.MISSION_ARCHIVE),
+                dfUnity.loadedAssetFolder.GetArchivePath(AssetType.MISSION_ARCHIVE),
                 DaggerfallConnect.FileUsage.UseDisk, true);
 
             List<string> textRecordList = new List<string>(this.textFile.GetAvailableRecords());

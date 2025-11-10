@@ -1,6 +1,4 @@
-using XnGine;
-
-namespace TerminatorUnity.Asset
+namespace XnGine
 {
 
     /// <summary>

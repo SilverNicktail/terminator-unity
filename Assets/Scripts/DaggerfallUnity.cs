@@ -20,7 +20,7 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Items;
 using DaggerfallWorkshop.Game.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
-using TerminatorUnity.Asset;
+using XnGine;
 
 namespace DaggerfallWorkshop
 {

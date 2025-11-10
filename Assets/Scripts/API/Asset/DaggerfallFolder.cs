@@ -9,7 +9,7 @@ using System.Linq;
 using XnGine;
 #endregion
 
-namespace TerminatorUnity.Asset
+namespace DaggerfallWorkshop.Asset
 {
 
     /// <summary>
