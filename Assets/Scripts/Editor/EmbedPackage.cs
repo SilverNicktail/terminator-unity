@@ -27,7 +27,7 @@ namespace UnityEditor.Extensions
         private static bool EmbedPackageValidation()
         {
             var path = GetSelectionPath();
-            var folder = System.IO.Path.GetDirectoryName(path);
+            var folder = (path != "") ? System.IO.Path.GetDirectoryName(path) : "";
 
             // We only deal with direct folders under Packages/
             return folder == "Packages";
