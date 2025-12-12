@@ -110,7 +110,7 @@ namespace XnGine
                     foreach (string targetFile in contents.Value)
                     {
                         string fullPath = Path.Combine(path, targetFile);
-                        allPresent = allPresent && Directory.Exists(fullPath);
+                        allPresent = allPresent && File.Exists(fullPath);
                     }
 
                     if (allPresent)
