@@ -24,9 +24,8 @@ I can contribute. Future Shock follows the same format and the existing code was
 some minor tweaks.
 
 `HAZE.000`
-: Currently unknown, potentially related to atmospheric effects? Looking at it in a hex editor, it starts with nulls 
-and builds up to max values in one long gradient. Could this be how the draw distance is implemented? That can't be
-right.
+: A [Colour Translation](https://en.uesp.net/wiki/Daggerfall_Mod:Image_formats/Colour_Translation) file, used to shift
+indices in *.COL files as the user moves toward/away from a billboard, providing a fogging implementation.
 
 [`xxx.HMI`](./MUSIC.md)
 : MIDI files, confirmed from Daggerfall's `MIDI.BSA`. In the Human Machine Interface proprietary format. Was able to 
@@ -37,11 +36,13 @@ convert one to regular MIDI using an [open source utility](https://github.com/Se
 gradient, but in the opposite direction. Could these be PAK files similar to Daggerfall's `CLIMATE.PAK`?
 
 `SHADE.xxx`
-: Shader data, simple numerical file extensions.
+: A [Colour Translation](https://en.uesp.net/wiki/Daggerfall_Mod:Image_formats/Colour_Translation) file, used to shift
+indices in *.COL files as the user moves toward/away from a billboard, providing a fogging implementation.
 
 `SHOCKRED.000`
-: Currently unknown, cannot be a palette file as it does not follow the spec of the others, which are equal length. File
-is much longer.
+: Currently unconfirmed, but based on the value gradient within the file and file extension this is potentially intended
+as a colour translation file similarly to the `HAZE.000` and `SHADE.xxx` files above. This file is much smaller, however.
+Potentially used for player damage?
 
 `TEXTURE.xxx`
 : Contains texture data, simple numerical file extensions. Seems to follow the same format as Daggerfall.
