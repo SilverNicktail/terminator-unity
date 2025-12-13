@@ -262,7 +262,6 @@ namespace DaggerfallWorkshop
                     image = glyph
                 };
 
-                // TODO: Move to stylesheet when layout goes XML, make flexible
                 // TODO: Add zoom control like the Project panel has
                 glyphArea.Add(glyphImage);
 

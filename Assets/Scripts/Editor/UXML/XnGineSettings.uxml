@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd">
+
+    <Label text="XnGine Project Settings" />
+    <TextField
+        name="assetFolderPath"
+        binding-path="assetFolderPath" 
+        label="Game Asset Folder"
+        readonly="true"
+        tooltip="Path to your game's asset folder (ARENA2, GAMEDATA, etc)" />
+    <Button 
+        name="outputPathButton" 
+        text="Select Asset Folder"
+        tooltip="Select the location of your game's asset folder" />
+</UXML>
