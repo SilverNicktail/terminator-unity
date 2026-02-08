@@ -2,6 +2,7 @@
 // Original Author: Silver Nicktail <silver@nicktail.com>
 
 #region Using Statements
+using System;
 using System.IO;
 using System.Linq;
 using XnGine;
@@ -13,15 +14,18 @@ namespace TerminatorUnity.Asset
     {
         #region Filename Constants
 
-        private const string textureSearchPattern = "TEXTURE.???";
-
-        private const string vidSearchPattern = "*.VID";
-
         private const string fontSearchPattern = "FONT????.FNT";
 
         private const string heightMapSearchPattern = "WLD.???";
 
         private const string midiSearchPattern = "*.HMI";
+
+        private const string paletteSearchPattern = "*.COL";
+
+        private const string textureSearchPattern = "TEXTURE.???";
+
+        private const string vidSearchPattern = "*.VID";
+
 
         // Equivalent of MONSTER.BSA
         private const string enemyArchive = "MDMDENMS.BSA";
@@ -83,12 +87,15 @@ namespace TerminatorUnity.Asset
 
         private string[] musicFiles = { };
 
+        private string[] paletteFiles = {};
+
         private string[] textureFiles = { };
 
         private string[] videoFiles = { };
 
         private static readonly AssetType[] availableTypes = new AssetType[]
         {
+            AssetType.COLOR_PALETTE,
             AssetType.ENEMY_MODEL_ARCHIVE,
             AssetType.FONT,
             AssetType.HEIGHT_MAP,
@@ -128,10 +135,11 @@ namespace TerminatorUnity.Asset
             }
 
             // Check for files
-            this.textureFiles = Directory.GetFiles(path, textureSearchPattern);
             this.fontFiles = Directory.GetFiles(path, fontSearchPattern);
             this.heightMapFiles = Directory.GetFiles(path, heightMapSearchPattern);
             this.musicFiles = Directory.GetFiles(path, midiSearchPattern);
+            this.paletteFiles = Directory.GetFiles(path, paletteSearchPattern);
+            this.textureFiles = Directory.GetFiles(path, textureSearchPattern);
             this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
             // Check for BSAs
@@ -176,8 +184,15 @@ namespace TerminatorUnity.Asset
 
         public string[] GetAssetPaths(AssetType type)
         {
+            if (! availableTypes.Contains(type))
+            {
+                throw new NotSupportedException("Future Shock does not contain that asset type, or you passed an archive type.");
+            }
+
             switch (type)
             {
+                case AssetType.COLOR_PALETTE:
+                    return paletteFiles;
                 case AssetType.FONT:
                     return fontFiles;
                 case AssetType.HEIGHT_MAP:
