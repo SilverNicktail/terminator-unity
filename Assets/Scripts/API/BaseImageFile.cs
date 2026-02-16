@@ -43,7 +43,7 @@ namespace DaggerfallConnect.Arena2
         /// <summary>
         /// Compression formats enumeration. This is shared as internal as most image formats use some kind of compression.
         /// </summary>
-        internal enum CompressionFormats
+        public enum CompressionFormats
         {
             Uncompressed = 0x0000,
             RleCompressed = 0x0002,
@@ -55,7 +55,7 @@ namespace DaggerfallConnect.Arena2
         /// IMG File header. This is shared as internal as the IMG structure is also used in CIF files.
         ///  The CifFile class will use this file header while reading most records.
         /// </summary>
-        internal struct ImgFileHeader
+        public struct ImgFileHeader
         {
             public long Position;
             public Int16 XOffset;
@@ -66,6 +66,7 @@ namespace DaggerfallConnect.Arena2
             public UInt16 PixelDataLength;
             public int FrameCount;
             public long DataPosition;
+            public bool HasEmbeddedPalette;
         }
 
         #endregion

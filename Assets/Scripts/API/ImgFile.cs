@@ -13,6 +13,7 @@
 using System;
 using System.IO;
 using DaggerfallConnect.Utility;
+using TerminatorUnity.Asset;
 #endregion
 
 namespace DaggerfallConnect.Arena2
@@ -32,7 +33,7 @@ namespace DaggerfallConnect.Arena2
         /// <summary>
         /// The image data for this image. Each IMG file only contains a single image.
         /// </summary>
-        private readonly DFBitmap imgRecord = new DFBitmap();
+        private DFBitmap imgRecord = new DFBitmap();
 
         /// <summary>
         /// Specifies if this IMG file defines its own palette.
@@ -311,63 +312,6 @@ namespace DaggerfallConnect.Arena2
 
         #endregion
 
-        #region Private Methods
-
-        /// <summary>
-        /// IMG files have a fixed width and height not specified in a header.
-        ///  This method returns the correct dimensions of images inside these files.
-        /// </summary>
-        /// <returns>Dimensions of image.</returns>
-        protected DFSize GetHeaderlessFileImageDimensions()
-        {
-            // Set image dimensions
-            switch (managedFile.Length)
-            {
-                case 44:
-                    return new DFSize(22, 22);
-                case 289:
-                    return new DFSize(17, 17);
-                case 441:
-                    return new DFSize(49, 9);
-                case 512:
-                    return new DFSize(32, 16);
-                case 720:
-                    return new DFSize(9, 80);
-                case 990:
-                    return new DFSize(45, 22);
-                case 1720:
-                    return new DFSize(43, 40);
-                case 2140:
-                    return new DFSize(107, 20);
-                case 2916:
-                    return new DFSize(81, 36);
-                case 3200:
-                    return new DFSize(40, 80);
-                case 3938:
-                    return new DFSize(179, 22);
-                case 4280:
-                    return new DFSize(107, 40);
-                case 4508:
-                    return new DFSize(322, 14);
-                case 20480:
-                    return new DFSize(320, 64);
-                case 26496:
-                    return new DFSize(184, 144);
-                case 64000:
-                    return new DFSize(320, 200);
-                case 64768:
-                    return new DFSize(320, 200);
-                case 68800:
-                    return new DFSize(320, 215);
-                case 112128:
-                    return new DFSize(512, 219);
-                default:
-                    return new DFSize(0, 0);
-            }
-        }
-
-        #endregion
-
         #region Readers
 
         /// <summary>
@@ -397,32 +341,11 @@ namespace DaggerfallConnect.Arena2
         /// <param name="reader">Source reader.</param>
         private void ReadHeader(ref BinaryReader reader)
         {
-            // Start header
-            reader.BaseStream.Position = 0;
-            header.Position = 0;
-
-            // Create header based on RCI byte-size test
-            DFSize sz = GetHeaderlessFileImageDimensions();
-            if (sz.Width == 0 && sz.Height == 0)
-            {
-                // This image has a header
-                ReadImgFileHeader(ref reader, ref header);
-            }
-            else
-            {
-                // This is an RCI-style image has no header, so we need to build one
-                // Note that RCI-style images are never compressed
-                header.XOffset = 0;
-                header.YOffset = 0;
-                header.Width = (Int16)sz.Width;
-                header.Height = (Int16)sz.Height;
-                header.Compression = CompressionFormats.Uncompressed;
-                header.PixelDataLength = (UInt16)(header.Width * header.Height);
-                header.DataPosition = reader.BaseStream.Position;
-            }
-
-            // Store image data position
-            imageDataPosition = reader.BaseStream.Position;
+            
+            header = IMGParser.GetImageHeader(ref reader);
+            // Store image data position separately
+            // TODO: Needed? Data position is in header.
+            imageDataPosition = header.DataPosition;
         }
 
         /// <summary>
@@ -442,66 +365,10 @@ namespace DaggerfallConnect.Arena2
 
             // Create reader
             BinaryReader Reader = managedFile.GetReader(imageDataPosition);
-
-            // Read image data
-            ReadImage(ref Reader);
-
-            // Read palette data
-            ReadPalette(ref Reader);
+            imgRecord = IMGParser.GetPixelData(ref Reader, ref header, Palette);
+            isPalettizedValue = header.HasEmbeddedPalette;
 
             return true;
-        }
-
-        /// <summary>
-        /// Read uncompressed image data.
-        /// </summary>
-        /// <param name="reader">Source reader positioned at start of image data.</param>
-        /// <returns>True if succeeded, otherwise false.</returns>
-        private bool ReadImage(ref BinaryReader reader)
-        {
-            // Read image bytes
-            BinaryWriter writer = new BinaryWriter(new MemoryStream(imgRecord.Data));
-            writer.Write(reader.ReadBytes(imgRecord.Width * imgRecord.Height));
-
-            return true;
-        }
-
-        /// <summary>
-        /// Some IMG files contain palette information following the image data.
-        ///  This palette will replace any previosuly specified palette.
-        /// </summary>
-        /// <param name="reader">Source reader positioned at end of image data.</param>
-        private void ReadPalette(ref BinaryReader reader)
-        {
-            // Get filename
-            string fn = Path.GetFileName(managedFile.FilePath);
-            switch (fn)
-            {
-                case "CHGN00I0.IMG":
-                case "DIE_00I0.IMG":
-                case "PICK02I0.IMG":
-                case "PICK03I0.IMG":
-                case "PRIS00I0.IMG":
-                case "TITL00I0.IMG":
-                    myPalette.Read(ref reader);
-                    isPalettizedValue = true;
-                    break;
-                default:
-                    isPalettizedValue = false;
-                    return;
-            }
-
-            // The palette for palettized images is very dark. Multiplying the RGB values by 4 results in correct-looking colours
-            if (IsPalettized)
-            {
-                for (int i = 0; i < 256; i++)
-                {
-                    int r = myPalette.GetRed(i) * 4;
-                    int g = myPalette.GetGreen(i) * 4;
-                    int b = myPalette.GetBlue(i) * 4;
-                    myPalette.Set(i, (byte)r, (byte)g, (byte)b);
-                }
-            }
         }
 
         #endregion
