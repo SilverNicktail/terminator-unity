@@ -64,7 +64,6 @@ namespace TerminatorUnity.Editor
                 return;
             }
 
-            // TODO: Have assset folder interface return available text archives
             this.textFile = new FSTextFile(
                 dfUnity.loadedAssetFolder.GetArchivePath(AssetType.MISSION_ARCHIVE),
                 DaggerfallConnect.FileUsage.UseDisk, true);
@@ -73,7 +72,7 @@ namespace TerminatorUnity.Editor
             textRecordList.Sort();
             string firstRecord = textRecordList.First();
             PopupField<string> textRecordField = new PopupField<string>("Text Record", new List<string>(textRecordList), firstRecord);
-
+            
             textRecordField.RegisterValueChangedCallback(OnTextRecordSelectionChange);
             root.Q<VisualElement>("textRecordPlaceholder").Add(textRecordField);
 
