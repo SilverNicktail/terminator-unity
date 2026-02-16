@@ -33,7 +33,8 @@ convert one to regular MIDI using an [open source utility](https://github.com/Se
 
 `LIGHT.DAT`
 : Currently unknown, but likely lighting data. In a hex editor it looks like the inverse of `HAZE.000`; one long value
-gradient, but in the opposite direction. Could these be PAK files similar to Daggerfall's `CLIMATE.PAK`?
+gradient, but in the opposite direction. Highly likely to also be a [Colour Translation](https://en.uesp.net/wiki/Daggerfall_Mod:Image_formats/Colour_Translation)
+file.
 
 `SHADE.xxx`
 : A [Colour Translation](https://en.uesp.net/wiki/Daggerfall_Mod:Image_formats/Colour_Translation) file, used to shift
@@ -61,7 +62,7 @@ Future Shock contains seven:
 
 * [`MDMDBRIF.BSA`](./TEXT.md) - Briefing, in-mission and beastiary text.
 * `MDMDENMS.BSA` - Enemy model data, equivalent of MONSTER.BSA
-* `MDMDIMGS.BSA` - Image data
+* [`MDMDIMGS.BSA`](./IMAGES.md) - Image data
 * `MDMDMAPS.BSA` - Maps, equivalent of DF's MAPS.BSA
 * `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? Asset folder also contains lots of HMI files, as above, so these may be intended specifically for video.
 * `MDMDOBJS.BSA` - Level objects - walls, rubble, interior items, etc. Equivalent to DF's `ARCH3D.BSA`.
