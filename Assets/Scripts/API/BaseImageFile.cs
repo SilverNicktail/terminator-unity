@@ -363,26 +363,6 @@ namespace DaggerfallConnect.Arena2
         #region Protected Methods
 
         /// <summary>
-        /// Reads a standard IMG file header from the source stream into the desination header struct.
-        ///  This header is found in multiple image files which is why it's implemented here in the base.
-        /// </summary>
-        /// <param name="reader">Source reader positioned at start of header data.</param>
-        /// <param name="header">Destination header structure.</param>
-        internal void ReadImgFileHeader(ref BinaryReader reader, ref ImgFileHeader header)
-        {
-            // Read IMG header data
-            header.Position = reader.BaseStream.Position;
-            header.XOffset = reader.ReadInt16();
-            header.YOffset = reader.ReadInt16();
-            header.Width = reader.ReadInt16();
-            header.Height = reader.ReadInt16();
-            header.Compression = (CompressionFormats)reader.ReadUInt16();
-            header.PixelDataLength = reader.ReadUInt16();
-            header.FrameCount = 1;
-            header.DataPosition = reader.BaseStream.Position;
-        }
-
-        /// <summary>
         /// Reads RLE compressed data from source reader to destination writer.
         /// </summary>
         /// <param name="reader">Source reader positioned at start of input data.</param>

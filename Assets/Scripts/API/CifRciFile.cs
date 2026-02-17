@@ -13,6 +13,7 @@
 using System;
 using System.IO;
 using DaggerfallConnect.Utility;
+using TerminatorUnity.Asset;
 #endregion
 
 namespace DaggerfallConnect.Arena2
@@ -316,7 +317,7 @@ namespace DaggerfallConnect.Arena2
             do
             {
                 // Read header data
-                ReadImgFileHeader(ref reader, ref records[count].Header);
+                IMGParser.ReadImgFileHeader(ref reader, ref records[count].Header);
 
                 // Set file type
                 records[count].FileType = RecordType.MultiImage;
@@ -413,7 +414,7 @@ namespace DaggerfallConnect.Arena2
             if (filename != "WEAPON09.CIF")
             {
                 // Read header data
-                ReadImgFileHeader(ref reader, ref records[count].Header);
+                IMGParser.ReadImgFileHeader(ref reader, ref records[count].Header);
 
                 // Set record type (first image is just a standard IMG image)
                 records[count].FileType = RecordType.MultiImage;

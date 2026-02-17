@@ -114,11 +114,10 @@ namespace TerminatorUnity.Asset
 
         /// <summary>
         /// Reads a standard IMG file header from the source stream into the desination header struct.
-        ///  This header is found in multiple image files which is why it's implemented here in the base.
         /// </summary>
         /// <param name="reader">Source reader positioned at start of header data.</param>
         /// <param name="header">Destination header structure.</param>
-        private static void ReadImgFileHeader(ref BinaryReader reader, ref BaseImageFile.ImgFileHeader header)
+        public static void ReadImgFileHeader(ref BinaryReader reader, ref BaseImageFile.ImgFileHeader header)
         {
             // Read IMG header data
             header.Position = reader.BaseStream.Position;
