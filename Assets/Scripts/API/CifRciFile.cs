@@ -546,7 +546,7 @@ namespace DaggerfallConnect.Arena2
             long position = records[record].AnimHeader.Position + records[record].AnimHeader.FrameDataOffsetList[frame];
             BinaryReader reader = managedFile.GetReader(position);
             BinaryWriter writer = new BinaryWriter(new MemoryStream(records[record].Frames[frame].Data));
-            ReadRleData(ref reader, length, ref writer);
+            CFAParser.ReadRleData(ref reader, length, ref writer);
 
             return true;
         }
@@ -571,7 +571,7 @@ namespace DaggerfallConnect.Arena2
             long position = records[record].Header.DataPosition;
             BinaryReader reader = managedFile.GetReader(position);
             BinaryWriter writer = new BinaryWriter(new MemoryStream(records[record].Frames[frame].Data));
-            ReadRleData(ref reader, length, ref writer);
+            CFAParser.ReadRleData(ref reader, length, ref writer);
 
             return true;
         }

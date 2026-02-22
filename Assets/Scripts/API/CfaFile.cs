@@ -12,6 +12,7 @@
 using System;
 using System.IO;
 using DaggerfallConnect.Utility;
+using TerminatorUnity.Asset;
 
 namespace DaggerfallConnect.Arena2
 {
@@ -28,7 +29,7 @@ namespace DaggerfallConnect.Arena2
     {
         #region Fields
 
-        Header header;
+        CFAHeader header;
         byte[] imageData;
 
         #endregion
@@ -69,7 +70,7 @@ namespace DaggerfallConnect.Arena2
 
         #region Structures
 
-        struct Header
+        public struct CFAHeader
         {
             public Int16 WidthUncompressed;
             public Int16 Height;
@@ -203,7 +204,7 @@ namespace DaggerfallConnect.Arena2
             {
                 // Step through file
                 BinaryReader reader = managedFile.GetReader();
-                ReadHeader(reader);
+                CFAParser.ReadHeader(ref reader);
                 ReadImageData(reader);
             }
             catch (Exception e)
@@ -219,21 +220,6 @@ namespace DaggerfallConnect.Arena2
 
         #region Private Methods
 
-        // Read file header
-        void ReadHeader(BinaryReader reader)
-        {
-            reader.BaseStream.Position = 0;
-            header = new Header();
-            header.WidthUncompressed = reader.ReadInt16();
-            header.Height = reader.ReadInt16();
-            header.WidthCompressed = reader.ReadInt16();
-            header.Unknown1 = reader.ReadInt16();
-            header.Unknown2 = reader.ReadInt16();
-            header.BitsPerPixel = reader.ReadByte();
-            header.FrameCount = reader.ReadByte();
-            header.HeaderSize = reader.ReadInt16();
-        }
-
         // Read image data for all frames
         void ReadImageData(BinaryReader reader)
         {
@@ -244,7 +230,7 @@ namespace DaggerfallConnect.Arena2
             // Image data is a series of sequential frames
             reader.BaseStream.Position = header.HeaderSize;
             BinaryWriter writer = new BinaryWriter(new MemoryStream(imageData));
-            ReadRleData(ref reader, header.WidthCompressed * header.Height * header.FrameCount, ref writer);
+            CFAParser.ReadRleData(ref reader, header.WidthCompressed * header.Height * header.FrameCount, ref writer);
             writer.Close();
         }
 
