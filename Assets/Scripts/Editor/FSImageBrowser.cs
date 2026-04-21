@@ -35,6 +35,8 @@ namespace TerminatorUnity.Editor
         [MenuItem(menuPath)]
         static void Init()
         {
+            Debug.Log("Attempting to init image browser window");
+            
             FSImageBrowser window = (FSImageBrowser)GetWindow(typeof(FSImageBrowser));
             window.titleContent = new GUIContent(windowTitle);
         }        
@@ -55,63 +57,75 @@ namespace TerminatorUnity.Editor
                 dfUnity = DaggerfallUnity.Instance;
             }
 
-            VisualElement root = rootVisualElement;
-            VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/UXML/FSImageBrowser.uxml");
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Editor/USS/FSImageBrowser.uss");
-            VisualElement ui = uiAsset.CloneTree();
+            // I normally despise generic exception handling, but it's necessary in createGUI().
+            // Need to catch all unhandled exceptions in here, or the GUI will fail to initialise and 
+            // end up in an invalid state we might not be able to recover from. Had to comment the 
+            // method body out and delete my editor's UI layout files!
+            try {
 
-            root.name = "fsImageBrowser";
-            root.styleSheets.Add(styleSheet);
-            root.Add(ui);
+                VisualElement root = rootVisualElement;
+                VisualTreeAsset uiAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/UXML/FSImageBrowser.uxml");
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Editor/USS/FSImageBrowser.uss");
+                VisualElement ui = uiAsset.CloneTree();
 
-            if (dfUnity.loadedAssetFolder == null)
-            {
-                root.Q<Label>("no-asset-folder").style.display = DisplayStyle.Flex;
-                root.Q<Box>("image-browser").style.display = DisplayStyle.None;
-                return;
-            }
+                root.name = "fsImageBrowser";
+                root.styleSheets.Add(styleSheet);
+                root.Add(ui);
 
-            this.imageArchive = new FSImageArchive(
-                dfUnity.loadedAssetFolder.GetArchivePath(AssetType.IMAGE_ARCHIVE),
-                DaggerfallConnect.FileUsage.UseDisk);
+                if (dfUnity.loadedAssetFolder == null)
+                {
+                    root.Q<Label>("no-asset-folder").style.display = DisplayStyle.Flex;
+                    root.Q<Box>("image-browser").style.display = DisplayStyle.None;
+                    return;
+                }
 
-            List<string> imageRecordList = new List<string>(this.imageArchive.GetAvailableFiles());
-            imageRecordList.Sort();
-            selectedFile = imageRecordList.First();
+                this.imageArchive = new FSImageArchive(
+                    dfUnity.loadedAssetFolder.GetArchivePath(AssetType.IMAGE_ARCHIVE),
+                    DaggerfallConnect.FileUsage.UseDisk);
 
-            PopupField<string> imageRecordField = new PopupField<string>(
-                "Image Record", new List<string>(imageRecordList), 0
-            ){
-                bindingPath = "selectedFile",
-                tooltip = "Select an image to view",
-            };
+                List<string> imageRecordList = new List<string>(this.imageArchive.GetAvailableFiles());
+                imageRecordList.Sort();
+                selectedFile = imageRecordList.First();
 
-            imageRecordField.RegisterValueChangedCallback(OnImageRecordSelectionChange);
-            root.Q<VisualElement>("imageSelector").Add(imageRecordField);
+                PopupField<string> imageRecordField = new PopupField<string>(
+                    "Image Record", new List<string>(imageRecordList), 0
+                ){
+                    bindingPath = "selectedFile",
+                    tooltip = "Select an image to view",
+                };
 
-            paletteFilepaths = dfUnity.loadedAssetFolder.GetAssetPaths(AssetType.COLOR_PALETTE).ToDictionary(
-                path => Path.GetFileName(path),
-                path => path
-            );
-            List<string> paletteNames = new List<string>(paletteFilepaths.Keys);
-            paletteNames.Sort();
-            selectedPalette = paletteNames.First();
+                imageRecordField.RegisterValueChangedCallback(OnImageRecordSelectionChange);
+                root.Q<VisualElement>("imageSelector").Add(imageRecordField);
 
-            PopupField<string> paletteField = new PopupField<string>(
-                "Palette", paletteNames, 0
-            )
-            {
-                bindingPath = "selectedPalette",
-                tooltip = "Select a palette to apply to the image"
-            };
 
-            paletteField.RegisterValueChangedCallback(OnPaletteSelectionChange);
-            root.Q<VisualElement>("paletteSelector").Add(paletteField);
+                paletteFilepaths = dfUnity.loadedAssetFolder.GetAssetPaths(AssetType.COLOR_PALETTE).ToDictionary(
+                    path => Path.GetFileName(path),
+                    path => path
+                );
+                List<string> paletteNames = new List<string>(paletteFilepaths.Keys);
+                paletteNames.Sort();
+                selectedPalette = paletteNames.First();
 
-            root.Bind(new SerializedObject(this));
+                PopupField<string> paletteField = new PopupField<string>(
+                    "Palette", paletteNames, 0
+                )
+                {
+                    bindingPath = "selectedPalette",
+                    tooltip = "Select a palette to apply to the image"
+                };
+
+                paletteField.RegisterValueChangedCallback(OnPaletteSelectionChange);
+                root.Q<VisualElement>("paletteSelector").Add(paletteField);
             
-            LoadImageRecord(selectedFile, selectedPalette);
+                root.Bind(new SerializedObject(this));
+                
+                LoadImageRecord(selectedFile, selectedPalette);
+
+            } catch (Exception ex) {
+                Debug.LogError("Image browser failed to load due to unexpected error: " + ex);
+            }
         }
+        
 
         // TODO: Move to TrackPropertyValue() when it becomes available in later Unity version
         private void OnImageRecordSelectionChange(ChangeEvent<string> changeEvent)
