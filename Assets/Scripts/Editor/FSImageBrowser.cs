@@ -26,17 +26,29 @@ namespace TerminatorUnity.Editor
 
         private Dictionary<string, string> paletteFilepaths;
 
+        private bool loading = false;
+
+        private DFBitmap[] imageFrames;
+
+        private int currentFrame = 0;
+
+        private double lastFrameTime = 0.0f;
+
         [SerializeField]
         private string selectedFile;
 
         [SerializeField]
         private string selectedPalette;
 
+        [SerializeField]
+        private int fps = 4;
+
+        [SerializeField]
+        private int scale = 2;
+
         [MenuItem(menuPath)]
         static void Init()
         {
-            Debug.Log("Attempting to init image browser window");
-            
             FSImageBrowser window = (FSImageBrowser)GetWindow(typeof(FSImageBrowser));
             window.titleContent = new GUIContent(windowTitle);
         }        
@@ -50,7 +62,6 @@ namespace TerminatorUnity.Editor
 
         private void CreateGUI()
         {
-            Debug.Log("Attempting to init gui");
 
             if (!dfUnity)
             {
@@ -125,7 +136,23 @@ namespace TerminatorUnity.Editor
                 Debug.LogError("Image browser failed to load due to unexpected error: " + ex);
             }
         }
-        
+
+        private void Update()
+        {
+            // GUI hasn't finished initialising
+            if (!dfUnity)
+            {
+                return;
+            }
+
+            double interval = 1.0d / fps;
+            if (!loading && imageFrames.Length > 1 && EditorApplication.timeSinceStartup >= (lastFrameTime + interval))
+            {
+                int nextFrame = (currentFrame + 1 >= imageFrames.Length) ? 0 : currentFrame + 1;
+                DisplayImageFrame(nextFrame);
+            }
+        }
+
 
         // TODO: Move to TrackPropertyValue() when it becomes available in later Unity version
         private void OnImageRecordSelectionChange(ChangeEvent<string> changeEvent)
@@ -152,26 +179,43 @@ namespace TerminatorUnity.Editor
         }
 
         private void LoadImageRecord(String selectedFile, String selectedPalette)
-        {
+        {   
+            loading = true;
             DFPalette palette = new DFPalette(paletteFilepaths[selectedPalette]);
+            imageFrames = this.imageArchive.GetImageData(selectedFile, palette);
+            DisplayImageFrame(0);
+            loading = false;
+        }
 
-            DFBitmap bitmap = this.imageArchive.GetImageData(selectedFile, palette);
-            Texture2D imageTex = new Texture2D(bitmap.Width, bitmap.Height, TextureFormat.ARGB32, false);
-            imageTex.SetPixels32(bitmap.GetColor32());
+        private void DisplayImageFrame(int frameIdx)
+        {           
+            if (frameIdx < 0 || frameIdx > imageFrames.Length)
+            {
+                Debug.LogWarning($"Invalid frame index {frameIdx} requested for display, resetting to 0.");
+                frameIdx = 0;
+            }
+
+            DFBitmap frame = imageFrames[frameIdx];
+            ScrollView imageLoadArea = rootVisualElement.Q<ScrollView>("recordContentScroller");
+            imageLoadArea.Clear();
+ 
+            Texture2D imageTex = new Texture2D(frame.Width, frame.Height, TextureFormat.ARGB32, false);         
+            imageTex.SetPixels32(frame.GetColor32());
             imageTex.Apply();
             Image image = new Image()
             {
                 image = imageTex
             };
 
-            // TODO: Add a scaling control
-            image.style.width = bitmap.Width * 2;
-            image.style.height = bitmap.Height * 2;
+            image.style.width = frame.Width * scale;
+            image.style.height = frame.Height * scale;                
 
-            ScrollView imageLoadArea = rootVisualElement.Q<ScrollView>("recordContentScroller");
-            imageLoadArea.Clear();
             imageLoadArea.Add(image);
+
+            currentFrame = frameIdx;
+            lastFrameTime = EditorApplication.timeSinceStartup;
         }
 
     }
+
 }

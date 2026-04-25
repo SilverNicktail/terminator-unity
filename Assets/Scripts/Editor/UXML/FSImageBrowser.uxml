@@ -15,6 +15,19 @@
         <!-- PopupField doesn't support UXML in Unity 2019 so we're going to bind them to these placeholders -->
         <VisualElement name="imageSelector"></VisualElement>
         <VisualElement name="paletteSelector"></VisualElement>
+        <editor:IntegerField
+            name="fps"
+            binding-path="fps"
+            label="FPS (for animations)"
+            />
+        <SliderInt 
+            name="scale"
+            binding-path="scale" 
+            label="Integer Scale" 
+            direction="horizontal"
+            low-value="1"
+            high-value="8"
+            page-size="1" />
         <ScrollView
             name="recordContentScroller"
             show-horizontal-scroller="true"

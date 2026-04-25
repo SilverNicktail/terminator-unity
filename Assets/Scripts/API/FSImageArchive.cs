@@ -112,16 +112,23 @@ namespace TerminatorUnity.Asset
         /// <summary>
         /// Get pixel data of an image in the archive. If the image
         /// has an embedded palette, it will override any palette passed in.
+        /// Returns an array of each frame in the image (only one "frame" for static images).
         /// </summary>
         /// <param name="filename">Name of file to fetch</param>
         /// <param name="palette">Colour palette to apply to pixel data</param>
         /// <returns>Complete bitmap wrapper for file</returns>
-        public DFBitmap GetImageData(string filename, DFPalette palette)
+        public DFBitmap[] GetImageData(string filename, DFPalette palette)
         {
             byte[] rawData = GetImageRaw(filename);
-            BaseImageFile.ImgFileHeader header = IMGParser.GetImageHeader(rawData);
-    
-            return IMGParser.GetPixelData(rawData, ref header, palette);
+            
+            if (filename.EndsWith("CFA", StringComparison.CurrentCultureIgnoreCase)) {
+                CfaFile.CFAHeader header = CFAParser.ReadHeader(rawData);
+                return CFAParser.ReadFrames(rawData, header, palette);
+            } else {
+                BaseImageFile.ImgFileHeader header = IMGParser.GetImageHeader(rawData);
+                return new DFBitmap[] { IMGParser.GetPixelData(rawData, ref header, palette) };
+            }
+
         }
 
     }
