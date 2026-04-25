@@ -4,8 +4,23 @@ Terminator Unity is an attempt to create a Unity wrapper around the game Termina
 original game to run cleanly on modern systems, with many quality-of-life upgrades. It is based directly on the
 extraordinary work done by the Daggerfall Unity team, who already achieved this for The Elder Scrolls: Daggerfall.
 
-Daggerfall Unity is an open source recreation of Daggerfall in the Unity engine created by
+Daggerfall Unity is an open source engine port/uplift of Daggerfall to the Unity engine created by
 [Daggerfall Workshop](http://www.dfworkshop.net).
+
+## Hello, Lawyers!
+
+Terminator Unity is a game mod (an engine port) and requires a legal copy of Terminator: Future Shock to run. This 
+provides all necessary game assets such as textures, 3D models, and sound effects. **Terminator Unity does not 
+distribute any copyrighted material.** Unlike Daggerfall, Future Shock was never made available as freeware, and 
+because of its movie licensing it will likely never be released again, so users will have to source an original copy of
+the game.
+
+There's nothing I can do about this. Do not try to circumnavigate this restriction. Any issues or discussions created
+asking for a copy of the game will be deleted and the user banned.
+
+This mod has nothing to do with the owners of the Terminator intellectual property, or Future Shock specifically, and
+doesn't pretend otherwise. Obviously I don't own the "Terminator" name, or anything like that, and the people that do
+haven't endorsed me. I just love this game and I want to restore it for the people that own it.
 
 ## Future What?
 
@@ -19,7 +34,7 @@ after Doom II, and one year __before__ both Duke Nukem 3D and Quake, it's far mo
 
 It was also just a pretty damn good FPS, if you ask me. Future Shock was moody, atmospheric, lonely, occasionally 
 terrifying and mostly faithful to the world created by the films. For myself, Future Shock was a formative experience, 
-directly contributing to a lifelong love of gaming. Unforunately, it sits forgotten in the annals of the medium, with
+directly contributing to a lifelong love of gaming. Unfortunately it sits forgotten in the annals of the medium, with
 no digital release (owing to its status as a movie-licensed game), system requirements too archaic for modern machines,
 and visuals/AI that - let's be honest - hold up as well as a chocolate teapot. I hope to help resolve some of these
 issues and make the game more accessible to modern audiences.
@@ -88,13 +103,7 @@ future.
 
 ## Installation (TBC)
 
-Terminator Unity requires a legal copy of Terminator: Future Shock to run. This provides all necessary game assets such 
-as textures, 3D models, and sound effects. **Terminator Unity does not distribute any copyrighted material.** Unlike
-Daggerfall, Future Shock was never made available as freeware, and because of its movie licensing it will likely never
-be released again, so you will have to source an original copy of the game.
-
-There's nothing I can do about this. Do not try to circumnavigate this restriction. Any issues or discussions created
-asking for a copy of the game will be deleted and the user banned.
+Can't confirm how this will work yet, but I can confirm you'll need a copy of the original install disc.
 
 Don't worry, no need to run DOSBox and manually install everything! The Future Shock disc contains the full
 installation data in an uncompressed form. Simply copy the `/SHOCK/GAMEDATA/` folder to your hard drive and point
