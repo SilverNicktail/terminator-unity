@@ -148,19 +148,12 @@ Character codes are as follows:
 |010|Briefing over radio|
 |011|John Connor (outdoors)|
 
-~~*For some reason John's character code changes for missions 16 and 17.
-This is actually right after The Bishop Incident (yes, I'm trying not to spoil
-the story of a 30-year-old movie licensed PC game, sue me) which has some
-curious implications. A dropped storyline, perhaps?~~
-
-~~**Appears only in mission 10, need to play it and check.~~
-
-Having successfully retrieved briefing images, these character codes make more
-sense. John's appearance changes twice during the game - once after he receives
-a scar, and once when he appears outside. The filenames for character images in
-briefings are in the same order with the same numerical values as the text in
-this archive. This explains why John would appear to have three different 
-character codes.
+Having successfully retrieved briefing images, the duplicate character codes
+for John make more sense. John's appearance changes twice during the game - 
+once after he receives a scar, and once when he appears outside. The filenames
+for character-specific images in briefings are in the same order with the same
+numerical values as the text in this archive. This explains why John would 
+appear to have three different character codes.
 
 ### Placeholders
 
