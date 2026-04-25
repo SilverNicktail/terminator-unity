@@ -42,7 +42,8 @@ The primary goals of the project are:
 * Translation support
 * Improved audio balancing, perhaps even a replacement SFX pack
 * Integration with RetroAchievements or similar
-* Some form of cloud save integration
+* Autosave and mission-select functionality
+* Some form of cloud save integration, if possible
 
 There are also several prominent bugs I would like to patch:
 
@@ -53,6 +54,29 @@ freeze mid-explosion.
 loss when reaching the end.
 * (If SkyNET is integrated) Game-breaking bug where a mission-critical human target cannot be killed if running Future 
 Shock in SkyNET's enhanced mode.
+
+## Progress
+
+**Current goal: loading, validating and documenting all file formats.**
+
+Most file formats line up pretty well between the '95 and '96 versions of the engine, but there are some files in 
+Future Shock that don't appear in Daggerfall, and other formats that have had minor changes made.
+
+* Archives :white_check_mark:
+* Colour Translation
+* Fonts :white_check_mark:
+* Height Maps
+* Images (Static) :white_check_mark:
+* Images (Animated) :white_check_mark:
+* Maps
+* Models (Enemies)
+* Models (Level)
+* Music - Validated, not loaded in code
+* Palettes :white_check_mark:
+* Sounds
+* Text :white_check_mark:
+* Textures
+* Video
 
 ## Development Notes
 
