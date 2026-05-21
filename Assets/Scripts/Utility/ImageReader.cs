@@ -17,6 +17,8 @@ using DaggerfallConnect.Utility;
 using DaggerfallConnect.Arena2;
 using DaggerfallWorkshop.Game;
 
+// TODO: Make game-generic and start using this for image loading in the UI if possible
+
 namespace DaggerfallWorkshop.Utility
 {
     /// <summary>

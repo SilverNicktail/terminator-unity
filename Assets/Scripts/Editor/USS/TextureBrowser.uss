@@ -1,0 +1,10 @@
+﻿#texturePreview .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#texturePreview Image {
+    width: 16px;
+    height: 16px;
+    margin: 5px;
+}

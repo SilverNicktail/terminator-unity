@@ -46,7 +46,7 @@ as a colour translation file similarly to the `HAZE.000` and `SHADE.xxx` files a
 Potentially used for player damage?
 
 `TEXTURE.xxx`
-: Contains texture data, simple numerical file extensions. Seems to follow the same format as Daggerfall.
+: Contains texture data, simple numerical file extensions. Confirmed that these follow the same format as Daggerfall and can be loaded using the DFU texture loading code. ([List of files](./TEXTURES.md))
 
 `TEST.WAV`
 : The Human Machine Interface sample file for testing sound card configuration.

@@ -11,8 +11,10 @@
 
 #region Using Statements
 using System;
+using System.Collections.Generic;
 using System.IO;
 using DaggerfallConnect.Utility;
+using XnGine;
 #endregion
 
 namespace DaggerfallConnect.Arena2
@@ -52,6 +54,22 @@ namespace DaggerfallConnect.Arena2
         /// Record array.
         /// </summary>
         private Record[] records;
+
+        public XngineGame activeGame;
+
+        public static readonly Dictionary<XngineGame, string[]> unsupportedFilenames = 
+            new Dictionary<XngineGame, string[]>
+            {
+                { XngineGame.ES_DAGGERFALL, new string[] {
+                    "TEXTURE.215",
+                    "TEXTURE.217",
+                    "TEXTURE.436"
+                } },
+                { XngineGame.T_FUTURE_SHOCK, new string[]
+                {
+                    "TEXTURE.025"
+                } }
+            };
 
         #endregion
 
@@ -138,6 +156,16 @@ namespace DaggerfallConnect.Arena2
         /// </summary>
         public TextureFile()
         {
+            activeGame = XngineGame.ES_DAGGERFALL;
+        }
+
+        /// <summary>
+        /// Basic init constructor, sets active game for internal logic without loading a file.
+        /// </summary>
+        /// <param name="activeGame">XnGine game being manipulated</param>
+        public TextureFile(XngineGame activeGame)
+        {
+            this.activeGame = activeGame;
         }
 
         /// <summary>
@@ -189,28 +217,15 @@ namespace DaggerfallConnect.Arena2
             get {return header.Name;}
         }
 
-        /// <summary>
-        /// Gets unsupported filenames. The three texture filenames returned have no image data or are otherwise invalid.
-        /// </summary>
-        /// <returns>Array of unsupported filenames.</returns>
-        public static string[] UnsupportedFilenames
-        {
-            get
-            {
-                string[] names = new string[3];
-                names[0] = "TEXTURE.215";
-                names[1] = "TEXTURE.217";
-                names[2] = "TEXTURE.436";
-                return names;
-            }
-        }
-
+        // TODO: Improve this structure across image file types, bit clunky
         /// <summary>
         /// Gets correct palette name for this file (always ART_PAL.COL for texture files).
         /// </summary>
         public override string PaletteName
         {
-            get { return "ART_PAL.COL"; }
+            get { 
+                return activeGame == XngineGame.T_FUTURE_SHOCK ? "SHOCK.COL" : "ART_PAL.COL"; 
+            }
         }
 
         /// <summary>
@@ -241,7 +256,7 @@ namespace DaggerfallConnect.Arena2
         public bool IsFilenameSupported(string filename)
         {
             // Look for filename in list of unsupported filenames
-            string[] names = UnsupportedFilenames;
+            string[] names = unsupportedFilenames[activeGame];
             for (int i = 0; i < names.Length; i++)
             {
                 if (names[i] == filename)
@@ -260,9 +275,25 @@ namespace DaggerfallConnect.Arena2
         /// <returns>True if successful, otherwise false.</returns>
         public override bool Load(string filePath, FileUsage usage, bool readOnly)
         {
+            return Load(filePath, usage, readOnly, XngineGame.ES_DAGGERFALL);
+        }
+
+        // TODO: Move into parent class? May be needed elsewhere.
+        /// <summary>
+        /// Loads a texture file.
+        /// </summary>
+        /// <param name="filePath">Absolute path to TEXTURE.* file</param>
+        /// <param name="usage">Specify if file will be accessed from disk, or loaded into RAM.</param>
+        /// <param name="readOnly">File will be read-only if true, read-write if false.</param>
+        /// <param name="game">ID of game texture belongs to, used internally for compatibility logic.</param>
+        /// <returns>True if successful, otherwise false.</returns>
+        public bool Load(string filePath, FileUsage usage, bool readOnly, XngineGame game)
+        {
             // Exit if this file already loaded
             if (managedFile.FilePath == filePath)
                 return true;
+
+            activeGame = game;
 
             // Validate filename
             string fn = Path.GetFileName(filePath);
@@ -297,6 +328,15 @@ namespace DaggerfallConnect.Arena2
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Get number of records in loaded texture file.
+        /// </summary>
+        /// <returns>Number of records.</returns>
+        public int GetRecordCount()
+        {
+            return records == null ? -1 : records.Length;
         }
 
         /// <summary>
