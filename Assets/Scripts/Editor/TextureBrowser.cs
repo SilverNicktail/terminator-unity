@@ -161,7 +161,6 @@ namespace TerminatorUnity.Editor
                 filteringMode.RegisterValueChangedCallback(OnFilterModeChange);
 
                 textureArea = root.Q<ScrollView>("texturePreview");
-                root.Add(textureArea);
 
                 root.Bind(new SerializedObject(this));
 
