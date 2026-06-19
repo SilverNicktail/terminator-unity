@@ -11,7 +11,7 @@ using System.Linq;
 using System;
 using XnGine;
 using DaggerfallWorkshop.Utility;
-using DaggerfallConnect.Utility;
+using TerminatorUnity.Game.UserInterface;
 
 namespace TerminatorUnity.Editor
 {
@@ -242,22 +242,25 @@ namespace TerminatorUnity.Editor
 
             // TODO: Show load error
             textureLoader.Load(textureFilepaths[filename], FileUsage.UseMemory, true);
-            Debug.Log($"{filename} contains {textureLoader.GetRecordCount()} records");
-
             textureArea.Clear();
 
             for (int x = 0; x < textureLoader.GetRecordCount(); x++)
             {
-                DFSize textureSize = textureLoader.GetSize(x);
-                Texture2D recordTexture = TextureReader.CreateFromAPIImage(textureLoader, x, 0);
-                
-                Image image = new Image()
-                {
-                     image = recordTexture
-                };
-                image.style.width = textureSize.Width * scale;
-                image.style.height = textureSize.Height * scale;                
+                int numFrames = textureLoader.GetFrameCount(x);
+                Texture2D[] textureFrames = new Texture2D[numFrames];
 
+                // TODO: Optimise this a bit, using pre-exisitng DFU code for now
+                for (int y = 0; y < numFrames; y++)
+                {
+                    textureFrames[y] = TextureReader.CreateFromAPIImage(textureLoader, record: x, frame: y);
+                }
+
+                AnimatedBitmap image = new AnimatedBitmap()
+                {
+                     fps = 6,
+                     scale = 2
+                };
+                image.SetImageData(textureFrames);
                 textureArea.Add(image);
 
             }

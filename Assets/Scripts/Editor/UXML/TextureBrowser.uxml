@@ -4,10 +4,11 @@
     xmlns="UnityEngine.UIElements"
     xmlns:editor="UnityEditor.UIElements"
     xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements"
+    xmlns:xngine="TerminatorUnity.Game.UserInterface"
     xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     xsi:schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
-                        UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd">
-
+                        UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                        TerminatorUnity.Game.UserInterface ../../../../UIElementsSchema/TerminatorUnity.Game.UserInterface.xsd">
     <Label
         name="no-asset-folder" style="display: none;"
         text="Game asset folder has not been set or is not valid. Please make sure your asset path is set and correct." />
@@ -31,7 +32,6 @@
             show-horizontal-scroller="true"
             show-vertical-scroller="true"
             tooltip="Texture Preview">
-
         </ScrollView>
     </Box>
 </UXML>

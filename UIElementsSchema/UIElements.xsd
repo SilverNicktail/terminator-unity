@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements" xmlns="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements" xmlns:editor="UnityEditor.UIElements" xmlns:xngine="TerminatorUnity.Game.UserInterface" xmlns:engine="UnityEngine.UIElements" xmlns="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:import schemaLocation="UnityEditor.PackageManager.UI.xsd" namespace="UnityEditor.PackageManager.UI" />
   <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
@@ -7,4 +7,5 @@
   <xs:import schemaLocation="UnityEditor.Localization.UI.xsd" namespace="UnityEditor.Localization.UI" />
   <xs:import schemaLocation="UnityEditor.AddressableAssets.GUIElements.xsd" namespace="UnityEditor.AddressableAssets.GUIElements" />
   <xs:import schemaLocation="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements.xsd" namespace="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements" />
+  <xs:import schemaLocation="TerminatorUnity.Game.UserInterface.xsd" namespace="TerminatorUnity.Game.UserInterface" />
 </xs:schema>
