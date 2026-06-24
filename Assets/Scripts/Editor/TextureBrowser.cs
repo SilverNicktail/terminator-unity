@@ -58,14 +58,18 @@ namespace TerminatorUnity.Editor
         private ScrollView textureArea = null;
 
 
-        // TODO: Put this into a menu check?
-        // Could disable the menu item if asset folder isn't available,
-        // though the notification message in the panel is useful.
         [MenuItem(menuPath)]
         static void Init()
         {
             TextureBrowser window = (TextureBrowser)EditorWindow.GetWindow(typeof(TextureBrowser));
             window.titleContent = new GUIContent(windowTitle);
+        }
+
+        [MenuItem(menuPath, true)]
+        static bool EnableMenuItem()
+        {
+            IAssetFolder loadedFolder = DaggerfallUnity.Instance.loadedAssetFolder;
+            return loadedFolder != null && loadedFolder.ProvidesAssetType(AssetType.TEXTURE);            
         }
 
         #region GUI

@@ -22,6 +22,8 @@ namespace DaggerfallWorkshop.Asset
 
         private const string fontSearchPattern = "FONT????.FNT";
 
+        private const string paletteSearchPattern = "*.PAL";
+
         private const string textureSearchPattern = "TEXTURE.???";
 
         private const string vidSearchPattern = "*.VID";
@@ -47,6 +49,7 @@ namespace DaggerfallWorkshop.Asset
             AssetType.MAP_ARCHIVE,
             AssetType.MAP_BLOCK_ARCHIVE,
             AssetType.MODEL_ARCHIVE,
+            AssetType.COLOR_PALETTE,
             AssetType.SFX_ARCHIVE,
             AssetType.TEXTURE,
             AssetType.VIDEO,
@@ -59,6 +62,8 @@ namespace DaggerfallWorkshop.Asset
 
         private const int minFontCount = 4;
 
+        private const int minPaletteCount = 4;
+
         private const int minTextureCount = 472;
 
         private const int minVidCount = 17;
@@ -70,6 +75,8 @@ namespace DaggerfallWorkshop.Asset
         private string path;
 
         private string[] fontFiles = { };
+
+        private string[] paletteFiles = { };
 
         private string[] textureFiles = { };
 
@@ -118,6 +125,7 @@ namespace DaggerfallWorkshop.Asset
 
             // Check for files
             this.fontFiles = Directory.GetFiles(path, fontSearchPattern);
+            this.paletteFiles = Directory.GetFiles(path, paletteSearchPattern);
             this.textureFiles = Directory.GetFiles(path, textureSearchPattern);
             this.videoFiles = Directory.GetFiles(path, vidSearchPattern);
 
@@ -139,6 +147,7 @@ namespace DaggerfallWorkshop.Asset
             return
                 this.fontFiles.Length >= minFontCount &&
                 this.textureFiles.Length >= minTextureCount &&
+                this.paletteFiles.Length >= minPaletteCount &&
                 (!requireVideos || this.videoFiles.Length >= minVidCount || this.hasAltVids) &&
                 (this.hasMapBlocks || this.hasAltBlocks) &&
                 (this.hasMaps || this.hasAltMaps) &&
@@ -178,6 +187,8 @@ namespace DaggerfallWorkshop.Asset
             {
                 case AssetType.FONT:
                     return fontFiles;
+                case AssetType.COLOR_PALETTE:
+                    return paletteFiles;
                 case AssetType.TEXTURE:
                     return textureFiles;
                 case AssetType.VIDEO:
