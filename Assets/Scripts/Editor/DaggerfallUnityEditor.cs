@@ -70,7 +70,7 @@ namespace DaggerfallWorkshop
 
 #if UNITY_EDITOR
             string message = string.Empty;
-            message += "When editing, set your game asset folder path in the XnGine section of the project settings panel. (Edit -> Project Settings)";
+            message += "When editing, set your game asset folder path in the XnGine section of the project settings panel. (Edit -> Project Settings). ";
             message += "If the folder is still not automatically loaded or becomes unloaded, clicking the button below will reload it.";
             EditorGUILayout.HelpBox(message, MessageType.Info);
             EditorGUILayout.SelectableLabel(dfUnity.Arena2Path, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
