@@ -68,19 +68,10 @@ namespace DaggerfallWorkshop
             // Update
             dfUnity.EditorUpdate();
 
-            // TODO: Try and find a better solution. Move this to editor settings?
-
-            // TODO: Port to Unity UI
-            // The IMGUI version of this *nearly* works in Unity for Linux 2019.4.40f1.
-            // Code executes as expected, then an error is thrown inside the IMGUI code.
-            // Doesn't seem to affect anything for us at first glance, but rather than
-            // risking it I'm going to leave this in place for now, then either remove it
-            // if the code goes to editor settings as per above, or port it to Unity UI
-            // to work properly cross-platform, or both.
-#if UNITY_EDITOR_LINUX
+#if UNITY_EDITOR
             string message = string.Empty;
-            message += "Linux users please set your xNgine game asset path installation path in Resources/defaults.ini then click 'Update Path' below.";
-            message += " This is a temporary limitation to work around Inspector bugs in experimental Linux build.";
+            message += "When editing, set your game asset folder path in the XnGine section of the project settings panel. (Edit -> Project Settings)";
+            message += "If the folder is still not automatically loaded or becomes unloaded, clicking the button below will reload it.";
             EditorGUILayout.HelpBox(message, MessageType.Info);
             EditorGUILayout.SelectableLabel(dfUnity.Arena2Path, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
             if (GUILayout.Button("Update Path"))

@@ -23,10 +23,8 @@ namespace XnGine
 // Throws separate errors in IDE and compiler, and compiler warning can't be suppressed with SuppressMessage!
 // One of those nice ugly things you end up with in C#
 # pragma warning disable 0414
-        [SuppressMessage("UI Binding", "IDE0052", 
-            Justification = "No-use warning incorrect, used in UI binding.")]
         [SerializeField]
-        private string assetFolderPath;
+        public string assetFolderPath;
 # pragma warning restore 0414
 
         public static XnGineSettings GetProjectSettings()

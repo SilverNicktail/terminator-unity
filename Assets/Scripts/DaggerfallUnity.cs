@@ -377,6 +377,13 @@ namespace DaggerfallWorkshop
         private string[] AssetPathsToSearch() {
             List<string> pathsToSearch = new List<string>();
             
+            
+            XnGineSettings projectSettings = XnGineSettings.GetProjectSettings();
+            if (projectSettings.assetFolderPath != null)
+            {
+                pathsToSearch.Add(projectSettings.assetFolderPath);
+            }
+
             if (Arena2Path != null && Arena2Path.Trim().Length > 0) {
                 pathsToSearch.Add(Arena2Path);
             }
