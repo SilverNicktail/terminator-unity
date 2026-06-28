@@ -41,7 +41,6 @@ namespace DaggerfallWorkshop
         public const string staticGeometryTag = "StaticGeometry";
 
         bool isReady = false;
-        bool isPathValidated = false;
         ContentReader reader;
 
         WorldTime worldTime;
@@ -140,7 +139,7 @@ namespace DaggerfallWorkshop
 
         public bool IsPathValidated
         {
-            get { return isPathValidated; }
+            get { return this.loadedAssetFolder?.FolderValid() == true; }
         }
 
         public MaterialReader MaterialReader
@@ -327,8 +326,6 @@ namespace DaggerfallWorkshop
 
         private void SetupGameAssetPath()
         {
-            // Clear path validated flag
-            isPathValidated = false;
 
 #if !UNITY_EDITOR
             // When starting a build, always clear stored path
@@ -349,7 +346,6 @@ namespace DaggerfallWorkshop
                 loadedAssetFolder = assetFolder;
                 Arena2Path = assetFolder.GetRootPath();
                 isReady = true;
-                isPathValidated = assetFolder.FolderValid();
                 LogMessage($"Game asset folder loaded at {Arena2Path}.", true);
 
             }
@@ -407,7 +403,7 @@ namespace DaggerfallWorkshop
             }
 
             // Ensure content readers available even when path not valid
-            if (isPathValidated)
+            if (IsPathValidated)
             {
                 DaggerfallUnity.LogMessage(string.Format("Setting up content readers with arena2 path '{0}'.", Arena2Path));
                 reader = new ContentReader(Arena2Path);

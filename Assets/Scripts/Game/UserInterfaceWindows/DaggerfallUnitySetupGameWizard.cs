@@ -28,6 +28,7 @@ using DaggerfallWorkshop.Game.Entity;
 using DaggerfallWorkshop.Game.Items;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Utility.AssetInjection;
+using DaggerfallWorkshop.Game.Utility;
 
 namespace DaggerfallWorkshop.Game.UserInterfaceWindows
 {
@@ -730,7 +731,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
                 //    ShowSummaryPanel();
                 //    break;
                 case SetupStages.LaunchGame:
-                    SceneManager.LoadScene(DaggerfallWorkshop.Game.Utility.SceneControl.GameSceneIndex);
+                    SceneControl.LoadGameScene();
                     break;
             }
         }

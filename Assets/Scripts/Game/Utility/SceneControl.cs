@@ -11,7 +11,7 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using XnGine;
 
 namespace DaggerfallWorkshop.Game.Utility
 {
@@ -20,6 +20,11 @@ namespace DaggerfallWorkshop.Game.Utility
     /// </summary>
     public class SceneControl : MonoBehaviour
     {
+
+        public const string GAME_SCENE_FS = "FutureShockGame";
+
+        public const string GAME_SCENE_DFU = "DaggerfallUnity";
+
         public const int StartupSceneIndex = 0;
         public const int GameSceneIndex = 1;
         public GameObject defaultSky = null;
@@ -42,8 +47,8 @@ namespace DaggerfallWorkshop.Game.Utility
                     DaggerfallUnity.Settings.Fullscreen);
             }
 
-            // Check arena2 path is validated OK, otherwise start game setup
-            if (!DaggerfallUnity.Instance.IsPathValidated || DaggerfallUnity.Settings.ShowOptionsAtStart || Input.anyKey)
+            // Check asset folder is validated OK, otherwise start game setup
+            if (! DaggerfallUnity.Instance.IsPathValidated || DaggerfallUnity.Settings.ShowOptionsAtStart || Input.anyKey)
             {
                 // Enable sky for test models
                 if (defaultSky != null)
@@ -54,28 +59,35 @@ namespace DaggerfallWorkshop.Game.Utility
             }
             else
             {
-                SceneManager.LoadScene(GameSceneIndex);
+                LoadGameScene(DaggerfallUnity.Instance.loadedAssetFolder.GetGame());
             }
-        }
-
-        //if scenes not in build menu, not guarenteed to be correct!
-        public static int GetCurrentSceneIndex()
-        {
-            int index = SceneManager.GetActiveScene().buildIndex;
-            DaggerfallUnity.LogMessage("scene index = " + index, false);
-            return index;
         }
 
         public static bool StartupSceneLoaded()
         {
-            return GetCurrentSceneIndex() == StartupSceneIndex;
+            return SceneManager.GetActiveScene().buildIndex == 0;
         }
 
-        public static bool GameSceneLoaded()
+
+        public static void LoadGameScene()
         {
-            return GetCurrentSceneIndex() == GameSceneIndex;
+            if (DaggerfallUnity.Instance.IsPathValidated)
+            {
+                LoadGameScene(DaggerfallUnity.Instance.loadedAssetFolder.GetGame());
+            }
         }
 
+        public static void LoadGameScene(XngineGame game)
+        {
+            if (game == XngineGame.ES_DAGGERFALL)
+            {
+                SceneManager.LoadScene(GAME_SCENE_DFU);
+            } 
+            else if (game == XngineGame.T_FUTURE_SHOCK)
+            {
+                SceneManager.LoadScene(GAME_SCENE_FS);
+            }
+        }
 
     }
 }
