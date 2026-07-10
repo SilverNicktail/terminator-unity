@@ -896,7 +896,6 @@ namespace DaggerfallWorkshop.Game
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(this.gameObject);
             }
             else if (instance != this)
             {
