@@ -24,7 +24,7 @@
             name="scale"
             binding-path="scale" 
             label="Integer Scale" 
-            direction="horizontal"
+            direction="Horizontal"
             low-value="1"
             high-value="8"
             page-size="1" />
