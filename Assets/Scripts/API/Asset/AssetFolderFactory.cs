@@ -67,10 +67,12 @@ namespace XnGine
 
             XngineGame detectedGame = XngineGame.ES_DAGGERFALL;
             string detectedPath = null;
+            string pathToValidate = path;
 
             Debug.Log($"Checking asset folder at {path}");
 
-            // User has selected parent folder
+            // Check if user has selected parent folder rather than directly
+            // selecting the asset folder
             foreach (KeyValuePair<XngineGame, string> folder in folderNames)
             {
 
@@ -80,46 +82,35 @@ namespace XnGine
 
                 if (Directory.Exists(pathRegular))
                 {
-                    detectedPath = pathRegular;
+                    pathToValidate = pathRegular;
                 }
                 else if (Directory.Exists(pathLower))
                 {
-                    detectedPath = pathLower;
+                    pathToValidate = pathLower;
                 }
                 else if (Directory.Exists(pathUpper))
                 {
-                    detectedPath = pathUpper;
-                }
-
-                if (detectedPath != null)
-                {
-                    detectedGame = folder.Key;
-                    break;
+                    pathToValidate = pathUpper;
                 }
 
             }
 
-            if (detectedPath == null)
+            foreach (KeyValuePair<XngineGame, List<string>> contents in folderContents)
             {
+                bool allPresent = true;
 
-                // User has selected asset folder directly
-                foreach (KeyValuePair<XngineGame, List<string>> contents in folderContents)
+                foreach (string targetFile in contents.Value)
                 {
-                    bool allPresent = true;
-
-                    foreach (string targetFile in contents.Value)
-                    {
-                        string fullPath = Path.Combine(path, targetFile);
-                        allPresent = allPresent && File.Exists(fullPath);
-                    }
-
-                    if (allPresent)
-                    {
-                        detectedPath = path;
-                        detectedGame = contents.Key;
-                    }
+                    string fullPath = Path.Combine(pathToValidate, targetFile);
+                    allPresent = allPresent && File.Exists(fullPath);
                 }
 
+                if (allPresent)
+                {
+                    detectedPath = pathToValidate;
+                    detectedGame = contents.Key;
+                    break;
+                }
             }
 
             if (detectedPath != null)
