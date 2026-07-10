@@ -42,7 +42,7 @@ issues and make the game more accessible to modern audiences.
 ## What about SkyNET?
 
 Future Shock got a standalone expansion pack, SkyNET, in 1996. If possible, I would like to support that release as
-well, but for the initial work I will focus on Future Shock (while leaving space to accommodate SkyNET where possible).
+well, but for the initial work I will focus on Future Shock (while leaving space to accommodate SkyNET where possible). I've also got my claws on the Future Shock demo disc, which would be fun to add support for.
 
 ## Goals
 
@@ -72,7 +72,7 @@ Shock in SkyNET's enhanced mode.
 
 ## Progress
 
-**Current goal: loading, validating and documenting all file formats.**
+### Assets
 
 Most file formats line up pretty well between the '95 and '96 versions of the engine, but there are some files in 
 Future Shock that don't appear in Daggerfall, and other formats that have had minor changes made.
@@ -92,6 +92,19 @@ Future Shock that don't appear in Daggerfall, and other formats that have had mi
 * Text :white_check_mark:
 * Textures
 * Video
+
+### Unity Upgrade
+
+After validating the main asset formats in Future Shock against those in Daggerfall, and cracking the game's text 
+storage, I'm analysing DFU's runtime code and working on a Future shock equivalent in a different scene. However, due
+to its age DFU is using a number of Unity tools that range from legacy to "no longer available". I am also not able
+to re-use as much of the DFU code as I had hoped, partly due to the two games featuring very different mechanics,
+and partly due to many in-game objects being tightly coupled to each other via singleton dependencies.
+
+I'm reluctant to implement new code using legacy features that will need replacing anyway, and honestly I much prefer
+some of the newer replacements for those features. UI Toolkit in particular is a problem, only being available within
+the editor in Unity 2019. This leaves me considering a Unity upgrade for the project earlier than planned, or even
+restarting in Unity 6, using the DFU code as a direct reference.
 
 ## Development Notes
 
@@ -125,9 +138,3 @@ selected, so Terminator Unity will not work against copies already installed via
 * Processor: Intel i5 (Skylake) equivalent
 * Graphics: GTX 660 with 2GB video memory and up-to-date drivers
 * Memory: 4GB system RAM
-
-## Unity Version
-
-Daggerfall Unity was most recently developed against Unity 2019. I am hopeful that I can update the project to a more
-recent version. Not sure yet of the reason why this hasn't occurred upstream. Could be the custom tools that were
-developed for the project (which I plan to update as my first task anyway).
