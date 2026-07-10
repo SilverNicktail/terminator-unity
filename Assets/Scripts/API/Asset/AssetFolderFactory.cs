@@ -129,7 +129,7 @@ namespace XnGine
             }
             else
             {
-                Debug.Log($"Could not find valid asset folder at or within {detectedPath}");
+                Debug.Log($"Could not find valid asset folder at or within {path}");
                 return null;
             }
 
