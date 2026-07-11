@@ -60,7 +60,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
 
         public void Open(string name)
         {
-            string path = Path.Combine(DaggerfallUnity.Instance.Arena2Path, name);
+            string path = Path.Combine(DaggerfallUnity.Instance.loadedAssetFolder.GetRootPath(), name);
             if (!vidFile.Open(path)) 
             {
                 Debug.LogError(string.Format("Failed to open video file: {0}", name));
