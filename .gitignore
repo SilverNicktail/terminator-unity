@@ -4,6 +4,7 @@
 /[Bb]uild/
 /[Bb]uilds/
 /[Bb]in/
+/Logs/
 /Assets/AssetStoreTools*
 /Assets/Resources/defaults.ini*
 
