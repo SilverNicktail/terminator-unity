@@ -262,7 +262,7 @@ namespace DaggerfallWorkshop.Game.UserInterfaceWindows
             remoteItems = items;
             chooseOneCallback = callback;
         }
-
+        
         public void SetShopShelfStealing()
         {
             shopShelfStealing = true;
