@@ -95,5 +95,5 @@
             "url": "/Assets/Editor/.Schemas/SpellIcons.schema.json"
         }
     ],
-    "dotnet.defaultSolution": "terminator-unity.sln"
+    "dotnet.defaultSolution": "terminator-unity.slnx"
 }
