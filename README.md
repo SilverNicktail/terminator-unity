@@ -106,6 +106,8 @@ some of the newer replacements for those features. UI Toolkit in particular is a
 the editor in Unity 2019. This leaves me considering a Unity upgrade for the project earlier than planned, or even
 restarting in Unity 6, using the DFU code as a direct reference.
 
+Update 2026-07-19: Updated to 2021 LTS without major issues, will pause here for now.
+
 ## Development Notes
 
 Linked here are some development notes from my initial work on the project. These will be uplifted into a wiki in
