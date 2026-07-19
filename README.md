@@ -120,14 +120,9 @@ future.
 
 Can't confirm how this will work yet, but I can confirm you'll need a copy of the original install disc.
 
-Don't worry, no need to run DOSBox and manually install everything! The Future Shock disc contains the full
-installation data in an uncompressed form. Simply copy the `/SHOCK/GAMEDATA/` folder to your hard drive and point
-Terminator Unity to it.
-
-(The original installation process does not copy video files to the hard drive, even when "full installation" is
-selected, so Terminator Unity will not work against copies already installed via DOSBox.)
-
 ## Requirements
+
+Cloned from Daggerfall Unity, will re-assess later on in development.
 
 ### Minimum
 * Operating system: Windows, Linux, MacOS
