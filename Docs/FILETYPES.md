@@ -48,6 +48,10 @@ Potentially used for player damage?
 `TEXTURE.xxx`
 : Contains texture data, simple numerical file extensions. Confirmed that these follow the same format as Daggerfall and can be loaded using the DFU texture loading code. ([List of files](./TEXTURES.md))
 
+`xxx.VID`
+: Video files in proprietary format. Not documented in DFU wiki, will add. FS videos initially seem to follow the same
+format as DF videos, but there seem to be some minor compatibility issues.
+
 `TEST.WAV`
 : The Human Machine Interface sample file for testing sound card configuration.
 
