@@ -12,9 +12,9 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Daggerfall Workshop
-  productName: Daggerfall Unity
-  defaultCursor: {fileID: 2800000, guid: 887ec86cd12e1624d8458c8d7950402a, type: 3}
+  companyName: Project Upthen
+  productName: Terminator Unity
+  defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
@@ -40,7 +40,7 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos:
-  - logo: {fileID: 21300000, guid: 42c946665a6b88249a599542edf895c2, type: 3}
+  - logo: {fileID: 0}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -88,7 +88,7 @@ PlayerSettings:
   deferSystemGesturesMode: 0
   hideHomeButton: 0
   submitAnalytics: 1
-  usePlayerLog: 0
+  usePlayerLog: 1
   bakeCollisionMeshes: 0
   forceSingleInstance: 0
   useFlipModelSwapchain: 1
@@ -139,7 +139,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.1.0
+  bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: 11400000, guid: b7df2f040b496394c82fa580d167aeb2, type: 2}
   metroInputSource: 0
@@ -162,7 +162,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Company.ProductName
-    Standalone: com.Daggerfall-Workshop.Daggerfall-Unity
+    Standalone: com.Project-Upthen.Terminator-Unity
     Tizen: com.Company.ProductName
     iPhone: com.Company.ProductName
     tvOS: com.Company.ProductName
@@ -283,7 +283,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 84d18e60460a4c242a21a4acd5a14403, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -634,8 +634,7 @@ PlayerSettings:
   ps4IncludedModules: []
   ps4attribVROutputEnabled: 0
   monoEnv: 
-  splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: d483b68b21c8b9c4384cf358063d11c4,
-    type: 3}
+  splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
   blurSplashScreenBackground: 0
   spritePackerPolicy: 
@@ -657,6 +656,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Android: UNITY_POST_PROCESSING_STACK_V2
+    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
     GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
     LinuxHeadlessSimulation: UNITY_POST_PROCESSING_STACK_V2
     Lumin: UNITY_POST_PROCESSING_STACK_V2
