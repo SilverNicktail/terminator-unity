@@ -31,7 +31,7 @@ namespace DaggerfallConnect.Arena2
         const int paletteDataLength = 768;
         const int paletteColorCount = 256;
         const int paletteMultiplier = 4;
-        const float minFrameDelay = (740f / sampleRate);
+        float minFrameDelay = (740f / sampleRate);
 
         readonly FileProxy vidFile = new FileProxy();
         VidHeader header = new VidHeader();
@@ -62,17 +62,18 @@ namespace DaggerfallConnect.Arena2
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public VidFile()
-        {
-        }
+        public VidFile() {}
 
         /// <summary>
         /// Open constructor.
         /// </summary>
         /// <param name="filename">Filname of VID to open.</param>
-        public VidFile(string filename)
+        public VidFile(string filename): this(filename, 740f) {}
+
+        public VidFile(string filename, float minAudioLength)
         {
-            Open(filename);
+             minFrameDelay = minAudioLength / sampleRate;
+             Open(filename);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ using System.Linq;
 using System;
 using XnGine;
 using DaggerfallWorkshop.Utility;
-using TerminatorUnity.Game.UserInterface;
+using TerminatorUnity.Game.UI;
 
 namespace TerminatorUnity.Editor
 {

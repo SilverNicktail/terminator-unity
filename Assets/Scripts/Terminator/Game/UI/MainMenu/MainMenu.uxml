@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML 
+    xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns="UnityEngine.UIElements" 
+    xmlns:xngine="TerminatorUnity.Game.UI" 
+    AddressablesGUI="UnityEditor.AddressableAssets.GUIElements" 
+    editor-extension-mode="False"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                    UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd
+                    TerminatorUnity.Game.UI ../../../../UIElementsSchema/TerminatorUnity.Game.UI.xsd">
+
+    <Style src="MainMenu.uss" />
+    <Image name="fullscreen-movie" class="fullscreen inactive" />
+    <Box name="menu-container" class="fullscreen">
+        <Box name="menu-bar">
+            <Image name="menu-bar-background" />
+        </Box>
+        <Image name="title" class="video" />
+    </Box>
+
+</UXML>

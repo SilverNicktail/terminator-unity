@@ -1,0 +1,28 @@
+/* :root {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 100%;
+} */
+
+/* Box {
+    background-color: black;
+}
+
+.inactive {
+    display: none;
+}
+
+.fullscreen {
+    width: 100;
+    height: 100;
+    flex-grow: 1;
+} */
+
+.video {
+    scale: 1 -1;
+}
+/* 
+#title {
+    flex-grow: 1;
+} */

@@ -4,11 +4,11 @@
     xmlns="UnityEngine.UIElements"
     xmlns:editor="UnityEditor.UIElements"
     xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements"
-    xmlns:xngine="TerminatorUnity.Game.UserInterface"
+    xmlns:xngine="TerminatorUnity.Game.UI"
     xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     xsi:schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
                         UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd
-                        TerminatorUnity.Game.UserInterface ../../../../UIElementsSchema/TerminatorUnity.Game.UserInterface.xsd">
+                        TerminatorUnity.Game.UI ../../../../UIElementsSchema/TerminatorUnity.Game.UI.xsd">
     <Label
         name="no-asset-folder" style="display: none;"
         text="Game asset folder has not been set or is not valid. Please make sure your asset path is set and correct." />

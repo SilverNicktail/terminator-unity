@@ -17,9 +17,14 @@ appear to be some minor incompatibilities.
 documentation back to the project and add a link here when I am confident. This initial doc is to note the differences/
 compatibility between Future Shcok and the DFU codebase.
 
-I read the DFU video parsing code (`VidFile.cs`) and used it to do some basic validation of `LOGO.VID` in Okteta. This 
-first file seems to initially be compatible, and I am able to retrieve audio and video from it, though the frame timing
- seems off and the video stutters. Currently working to diagnose and rectify this.
+## `LOGO.VID`
+
+The Bethesda logo video follows an identical format to the videos in Daggerfall. The video needed one adjustment to the
+existing parser in order to work correctly: lowering the minimum audio block length to 555 bytes. The `*.VID` parser 
+enforces a minimum block length in order to keep frame pacing consistent. `LOGO.VID` has many audio blocks 555 bytes in
+length, straying over this minimum, which caused audio blocks to have gaps at either side. Easily fixed.
+
+## Other Videos
 
 When I tried the same thing with the other vids, I got a parsing error. In Daggerfall videos there is always an audio
 block before the first video block, and the code expects it to be there. In the Future Shock videos, the first block is

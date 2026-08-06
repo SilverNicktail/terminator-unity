@@ -4,9 +4,9 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[assembly: UxmlNamespacePrefix("TerminatorUnity.Game.UserInterface", "xngine")]
+[assembly: UxmlNamespacePrefix("TerminatorUnity.Game.UI", "xngine")]
 
-namespace TerminatorUnity.Game.UserInterface
+namespace TerminatorUnity.Game.UI
 {
 
     public class AnimatedBitmap : VisualElement

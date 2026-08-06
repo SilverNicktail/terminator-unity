@@ -3,13 +3,13 @@ using System.IO;
 using UnityEngine;
 using XnGine;
 
-namespace TerminatorUnity.Game
+namespace TerminatorUnity.Game.Asset
 {
     
-    public class FSAssetManager : MonoBehaviour
+    public class AssetManager : MonoBehaviour
     {
         
-        public static FSAssetManager Instance { get; private set; }
+        public static AssetManager Instance { get; private set; }
 
         public IAssetFolder AssetFolder { get { return assetFolder; } }
 

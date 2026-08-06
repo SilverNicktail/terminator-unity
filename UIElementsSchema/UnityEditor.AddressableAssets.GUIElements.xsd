@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements" xmlns:editor="UnityEditor.UIElements" xmlns:xngine="TerminatorUnity.Game.UserInterface" xmlns:engine="UnityEngine.UIElements" xmlns="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements" elementFormDefault="qualified" targetNamespace="UnityEditor.AddressableAssets.GUIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements" xmlns:editor="UnityEditor.UIElements" xmlns:xngine="TerminatorUnity.Game.UI" xmlns:engine="UnityEngine.UIElements" xmlns="DaggerfallWorkshop.Game.Addons.RmbBlockEditor.Elements" elementFormDefault="qualified" targetNamespace="UnityEditor.AddressableAssets.GUIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:complexType name="DocumentationButtonType">
     <xs:complexContent mixed="false">
