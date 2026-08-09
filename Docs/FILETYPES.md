@@ -68,7 +68,7 @@ Future Shock contains seven:
 * `MDMDENMS.BSA` - Enemy model data, equivalent of MONSTER.BSA
 * [`MDMDIMGS.BSA`](./IMAGES.md) - Image data
 * `MDMDMAPS.BSA` - Maps, equivalent of DF's MAPS.BSA
-* `MDMDMUSC.BSA` - Music data, XMI format, whatever the heck that is. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? Asset folder also contains lots of HMI files, as above, so these may be intended specifically for video.
+* `MDMDMUSC.BSA` - Music data in XMI format. Judging by filenames (`FMINTRO.XMI`, etc) some of the audio appears to be for in-game movies? Strangely, the asset folder contains lots of HMI files, which seem to feature the music I am familiar with from the game, so having a second MIDI music format is unexpected. Are these actually used?
 * `MDMDOBJS.BSA` - Level objects - walls, rubble, interior items, etc. Equivalent to DF's `ARCH3D.BSA`.
 * `MDMDSFXS.BSA` - Sound effects, equivalent to DF's 'DAGGER.SND`.
 

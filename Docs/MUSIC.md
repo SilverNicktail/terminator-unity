@@ -48,3 +48,15 @@ for hmi in *.HMI; do
     timidity "$filename.mid" -OwS -o - | ffmpeg -f wav -i - "$filename.mp3"
 done
 ```
+
+## .XMI Files (Inside `MDMDMUSC.BSA`)
+
+This archive file contains a number of tracks in XMI format, which according 
+to the [DOS Modding Wiki](https://moddingwiki.shikadi.net/wiki/XMI_Format) is a
+competitor to the HMI format, created as part of the Miles Sound System.
+
+Not sure why the game would have its music in two unrelated formats. I've
+already identified music I recognise in the HMI files in the asset folder, so I
+am not sure if the XMI files are actually in use in the game. I will create an
+editor panel to decode and play them if possible, to see if they are
+alternatives of some kind.
