@@ -2,18 +2,13 @@ using System;
 using System.Text;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
+using TerminatorUnity.Game.Asset;
 using UnityEngine;
 
 namespace TerminatorUnity
 {
     public class FSTextFile
     {
-        private static readonly byte[] ENCODING_KEY = new byte[] {
-            0xDD, 0x83, 0x65, 0x57, 0xEA, 0x78, 0x08,
-            0x48, 0xB8, 0x01, 0x38, 0x94, 0x08, 0xDD,
-            0x3F, 0xC2, 0xBE, 0xAB, 0x76, 0xC6, 0x14
-        };
-
         private readonly BsaFile textFile = new BsaFile();
 
         private string[] availableRecords;
@@ -89,15 +84,8 @@ namespace TerminatorUnity
 
         private string Decode(byte[] rawText)
         {
-            uint keyIdx = 0;
-            byte[] converted = new byte[rawText.Length];
-            for (uint textIdx = 0; textIdx < rawText.Length; textIdx++)
-            {
-                converted[textIdx] = (byte)(rawText[textIdx] - ENCODING_KEY[keyIdx]);
-                keyIdx = (++keyIdx >= ENCODING_KEY.Length) ? 0 : keyIdx;
-            }
-
-            return Encoding.ASCII.GetString(converted);
+            byte[] decoded = VigenereDecoder.Decode(rawText);
+            return Encoding.ASCII.GetString(decoded);
         }
 
     }
