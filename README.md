@@ -77,6 +77,9 @@ Shock in SkyNET's enhanced mode.
 Most file formats line up pretty well between the '95 and '96 versions of the engine, but there are some files in 
 Future Shock that don't appear in Daggerfall, and other formats that have had minor changes made.
 
+Formats in this list with a :white_check_mark: symbol are ones that I have successfully parsed out and documented
+where appropriate.
+
 * Archives :white_check_mark:
 * Colour Translation
 * Fonts :white_check_mark:
@@ -88,9 +91,9 @@ Future Shock that don't appear in Daggerfall, and other formats that have had mi
 * Models (Level)
 * Music - Validated, not loaded in code
 * Palettes :white_check_mark:
-* Sounds
+* Sounds :white_check_mark:
 * Text :white_check_mark:
-* Textures
+* Textures :white_check_mark:
 * Video
 
 ### Unity Upgrade

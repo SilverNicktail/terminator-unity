@@ -101,7 +101,7 @@ namespace DaggerfallConnect.Utility
             string[] models = Directory.GetFiles(path, Arch3dFile.Filename);
             string[] blocks = Directory.GetFiles(path, BlocksFile.Filename);
             string[] maps = Directory.GetFiles(path, MapsFile.Filename);
-            string[] sounds = Directory.GetFiles(path, SndFile.Filename);
+            string[] sounds = Directory.GetFiles(path, SoundArchive.Filename);
             string[] woods = Directory.GetFiles(path, WoodsFile.Filename);
             string[] videos = Directory.GetFiles(path, vidSearchPattern);
 
@@ -160,7 +160,7 @@ namespace DaggerfallConnect.Utility
             // Supports alternate DAGGER.SND from Resources if available
             if (!results.SoundsValid)
             {
-                UnityEngine.TextAsset soundAsset = UnityEngine.Resources.Load(SndFile.Filename) as UnityEngine.TextAsset;
+                UnityEngine.TextAsset soundAsset = UnityEngine.Resources.Load(SoundArchive.Filename) as UnityEngine.TextAsset;
                 if (soundAsset != null)
                     results.SoundsValid = true;
             }

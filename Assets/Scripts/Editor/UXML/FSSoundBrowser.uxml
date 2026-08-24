@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xmlns:AddressablesGUI="UnityEditor.AddressableAssets.GUIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.UIElements ../../../../UIElementsSchema/UnityEngine.UIElements.xsd
+                        UnityEditor.UIElements ../../../../UIElementsSchema/UnityEditor.UIElements.xsd">
+
+    <Label
+        name="no-asset-folder" style="display: none;"
+        text="Game asset folder has not been set or is not valid. Please make sure your asset path is set and correct." />
+    <Box name="sound-browser">
+        <!-- PopupField doesn't support UXML in Unity 2019 so we're going to bind them to these placeholders -->
+        <VisualElement name="soundSelector"></VisualElement>
+        <Button name="button-play" text="Play" />
+        <Button name="button-stop" text="Stop" />
+    </Box>
+</UXML>

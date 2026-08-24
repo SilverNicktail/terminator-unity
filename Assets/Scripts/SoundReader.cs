@@ -10,12 +10,9 @@
 //
 
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using DaggerfallConnect;
-using DaggerfallConnect.Utility;
 using DaggerfallConnect.Arena2;
 using DaggerfallWorkshop.Utility.AssetInjection;
 
@@ -31,7 +28,7 @@ namespace DaggerfallWorkshop
         #region Fields
 
         DaggerfallUnity dfUnity;
-        SndFile soundFile;
+        SoundArchive soundFile;
 
         Dictionary<int, AudioClip> clipDict = new Dictionary<int, AudioClip>();
 
@@ -50,6 +47,17 @@ namespace DaggerfallWorkshop
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Retrieves an AudioClip based on the sound's name in the SFX archive
+        /// </summary>
+        /// <param name="recordName">Sound record's filename</param>
+        /// <returns>AudioClip or null.</returns>
+        public AudioClip GetAudioClip(string recordName)
+        {
+            int index = soundFile.GetRecordIndex(recordName);
+            return GetAudioClip(index);
+        }
 
         /// <summary>
         /// Gets AudioClip based on Daggerfall sound index.
@@ -88,7 +96,7 @@ namespace DaggerfallWorkshop
                     return null;
 
                 // Create audio clip
-                clip = AudioClip.Create(name, dfSound.WaveData.Length, 1, SndFile.SampleRate, false);
+                clip = AudioClip.Create(name, dfSound.WaveData.Length, 1, SoundArchive.SampleRate, false);
 
                 // Create data array
                 float[] data = new float[dfSound.WaveData.Length];
@@ -193,7 +201,7 @@ namespace DaggerfallWorkshop
             // Ensure sound reader is ready
             if (soundFile == null)
             {
-                soundFile = new SndFile(Path.Combine(dfUnity.Arena2Path, SndFile.Filename), FileUsage.UseMemory, true);
+                soundFile = new SoundArchive(Path.Combine(dfUnity.Arena2Path, SoundArchive.Filename), FileUsage.UseMemory, true);
             }
 
             return true;

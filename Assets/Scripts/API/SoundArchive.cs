@@ -12,6 +12,7 @@
 #region Using Statements
 using System;
 using System.IO;
+using System.Linq;
 using DaggerfallConnect.Utility;
 #endregion
 
@@ -19,9 +20,10 @@ namespace DaggerfallConnect.Arena2
 {
 
     /// <summary>
-    /// Connects to DAGGER.SND to enumerate and extract sound data.
+    /// Connects to an XnGine sound archive (DAGGER.SND, MDMDSFXS.BSA, etc) 
+    /// to enumerate and extract sound data.
     /// </summary>
-    public class SndFile
+    public class SoundArchive
     {
 
         #region Class Variables
@@ -29,14 +31,16 @@ namespace DaggerfallConnect.Arena2
         public const int SampleRate = 11025;
 
         /// <summary>
-        /// The BsaFile representing DAGGER.SND.
+        /// The BsaFile representing the sound archive
         /// </summary>
-        private readonly BsaFile bsaFile = new BsaFile();
+        private readonly BsaFile bsaFile = new();
 
         /// <summary>
         /// Array of decomposed sound records.
         /// </summary>
         internal SoundRecord[] sounds;
+
+        private string[] recordNames;
 
         #endregion
 
@@ -56,7 +60,7 @@ namespace DaggerfallConnect.Arena2
         #region Public Properties
 
         /// <summary>
-        /// Number of BSA records in DAGGER.SND.
+        /// Number of records in the sound archive
         /// </summary>
         public int Count
         {
@@ -69,6 +73,14 @@ namespace DaggerfallConnect.Arena2
         public BsaFile BsaFile
         {
             get { return bsaFile; }
+        }
+
+        public string[] RecordNames
+        {
+            get
+            {
+                return recordNames ?? (new string[0]);
+            }
         }
 
         #endregion
@@ -90,9 +102,7 @@ namespace DaggerfallConnect.Arena2
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SndFile()
-        {
-        }
+        public SoundArchive() {}
 
         /// <summary>
         /// Load constructor.
@@ -100,9 +110,10 @@ namespace DaggerfallConnect.Arena2
         /// <param name="filePath">Absolute path to DAGGER.SND.</param>
         /// <param name="usage">Determines if the BSA file will read from disk or memory.</param>
         /// <param name="readOnly">File will be read-only if true, read-write if false.</param>
-        public SndFile(string filePath, FileUsage usage, bool readOnly)
+        /// <param name="typedIndices">Whether BSA dictionary can have non-string indices (original v1 BSA files cannot)</param>
+        public SoundArchive(string filePath, FileUsage usage, bool readOnly, bool typedIndices = true)
         {
-            Load(filePath, usage, readOnly);
+            Load(filePath, usage, readOnly, typedIndices);
         }
 
         #endregion
@@ -126,27 +137,66 @@ namespace DaggerfallConnect.Arena2
             return -1;
         }
 
+        public int GetRecordIndex(string name)
+        {
+            return Array.IndexOf(recordNames, name);
+        }
+
         /// <summary>
         /// Load DAGGER.SND file.
         /// </summary>
         /// <param name="filePath">Absolute path to DAGGER.SND file.</param>
         /// <param name="usage">Specify if file will be accessed from disk, or loaded into RAM.</param>
         /// <param name="readOnly">File will be read-only if true, read-write if false.</param>
+        /// <param name="typedIndices">Whether BSA dictionary can have non-string indices (original v1 BSA files cannot)</param>
         /// <returns>True if successful, otherwise false.</returns>
-        public bool Load(string filePath, FileUsage usage, bool readOnly)
+        public bool Load(string filePath, FileUsage usage, bool readOnly, bool typedIndices = true)
         {
             // Validate filename
-            if (!filePath.EndsWith("DAGGER.SND", StringComparison.InvariantCultureIgnoreCase))
+            if (!filePath.EndsWith(".SND", StringComparison.InvariantCultureIgnoreCase) &&
+                !filePath.EndsWith(".BSA", StringComparison.InvariantCultureIgnoreCase))
                 return false;
 
             // Load file
-            if (!bsaFile.Load(filePath, usage, readOnly))
+            if (!bsaFile.Load(filePath, usage, readOnly, typedIndices: typedIndices))
                 return false;
 
             // Create records array
             sounds = new SoundRecord[bsaFile.Count];
 
+            // Would use a map here rather than two separate structures, but
+            // a string index is optional
+            if (bsaFile.DirectoryType == BsaFile.DirectoryTypes.NameRecord)
+            {
+                recordNames = new string[bsaFile.Count];
+
+                for (int x = 0; x < bsaFile.Count; x++)
+                {
+                    recordNames[x] = bsaFile.GetRecordName(x);
+                }
+            }
+
             return true;
+        }
+
+        public DFSound GetSound(string soundName)
+        {
+            int recordIndex = GetRecordIndex(soundName);
+            if (recordIndex < 0)
+            {
+                throw new ArgumentException("Record name does not exist");
+            }
+
+            // Check if already loaded
+            if (sounds[recordIndex].DFSound.WaveHeader != null &&
+               sounds[recordIndex].DFSound.WaveData != null)
+            {
+                return sounds[recordIndex].DFSound;
+            }
+
+            DFSound sound;
+            GetSound(recordIndex, out sound);
+            return sound;
         }
 
         /// <summary>
@@ -236,10 +286,7 @@ namespace DaggerfallConnect.Arena2
         /// <returns>True if index is within a valid range.</returns>
         public bool IsValidIndex(int sound)
         {
-            if (sound < 0 || sound >= bsaFile.Count)
-                return false;
-
-            return true;
+            return sound >= 0 && sound < bsaFile.Count;
         }
 
         #endregion
