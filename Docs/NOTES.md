@@ -39,51 +39,73 @@ This is a decent code structure that I should be able to keep and modify for Fut
 ## Daggerfall Scene Hierarchy
 
 `DaggerfallUnity`
-  : Hosts singletons/utility scripts providing asset access.
+: Hosts singletons/utility scripts providing asset access.
+
 `DaggerfallUI`
-  : Loads/displays appropriate UI elements, also hosts the primary audio source.
+: Loads/displays appropriate UI elements, also hosts the primary audio source.
+
 `QuestMachine`
-  : Script handling quests in Daggerfall - structure, state, etc. Also has its own audio source, not sure why at present.
+: Script handling quests in Daggerfall - structure, state, etc. Also has its own audio source, not sure why at present.
+
 `EntityEffectBroker`
-  : Handles the effects of magic spells between game entities.
+: Handles the effects of magic spells between game entities.
+
 `PlayerAdvanced`
-  : Player movement and state management. Using very old movement code, modern Unity may provide some of these features.
+: Player movement and state management. Using very old movement code, modern Unity may provide some of these features.
+
 `RetroPresentation`
-  : Handles viewport setup depending on monitor resolution/HUD size. Also handles graphical effects/filtering to make the retro graphics look good in a modern engine.
+: Handles viewport setup depending on monitor resolution/HUD size. Also handles graphical effects/filtering to make the retro graphics look good in a modern engine.
+
 `InputManager`
-  : Input handling/customisation specific to Daggerfall. Sets speeds, limits, etc to give everything the right feel.
+: Input handling/customisation specific to Daggerfall. Sets speeds, limits, etc to give everything the right feel.
+
 `GameManager`
-  : Runtime utilities, primarily provides a way to dynamically load/locate game systems at runtime.
+: Runtime utilities, primarily provides a way to dynamically load/locate game systems at runtime.
+
 `StartGameBehaviour`
-  : Handles all initial windowing setup and raises the necessary events to start the game.
+: Handles all initial windowing setup and raises the necessary events to start the game.
+
 `SaveLoadManager`
-  : Handles loading and saving of the game, using DFU's own format.
+: Handles loading and saving of the game, using DFU's own format.
+
 `Exterior`
-  : Hierarchy of objects that host the 3D world of the current level, if the player is outside - streaming world data, sunlight, the sky, background music, etc.
+: Hierarchy of objects that host the 3D world of the current level, if the player is outside - streaming world data, sunlight, the sky, background music, etc.
+
 `StreamingWorld`
-  : Loads level terrain data from Daggerfall's famous streaming world (where some areas are pre-defined, and others are generated from seed).
+: Loads level terrain data from Daggerfall's famous streaming world (where some areas are pre-defined, and others are generated from seed).
+
 `Interior`
-  : Hierarchy of objects that host the world if the player is in an indoor environment.
+: Hierarchy of objects that host the world if the player is in an indoor environment.
+
 `Dungeon`
-  : Hierarchy of objects that host the world if the player is in a dungeon.
+: Hierarchy of objects that host the world if the player is in a dungeon.
+
 `Canvas`
-  : Hosts the developer console as a child.
+: Hosts the developer console as a child.
+
 `EventSystem`
-  : Handles user input, as well as items like raycasting.
+: Handles user input, as well as items like raycasting.
+
 `Automap`
-  : Objects for interior and exterior automaps. (Are these the same in Daggerfall as the 3D map in Future Shock?)
+: Objects for interior and exterior automaps. (Are these the same in Daggerfall as the 3D map in Future Shock?)
+
 `WeatherManager`
-  : Manages, shockingly, in-game weather effects.
+: Manages, shockingly, in-game weather effects.
+
 `TalkManager`
-  : Handles conversation trees with NPCs.
+: Handles conversation trees with NPCs.
+
 `BankPurchase`
-  : Empty object, not sure what it's used for but obviously related to in-game trades.
+: Empty object, not sure what it's used for but obviously related to in-game trades.
+
 `TextManager`
-  : Organises/provides access to the game's text assets.
+: Organises/provides access to the game's text assets.
+
 `PrintScreenManager`
-  : Takes screenshots
+: Takes screenshots
+
 `PostProcessVolume`
-  : Controls graphical post-processing options.
+: Controls graphical post-processing options.
 
 So I can likely straight-up ditch most of these for Future Shock. I'll either need to split the other existing scripts
 into XnGine-generic and Daggerfall-specific components, or write fresh ones from scratch. The UI and input code in DFU
