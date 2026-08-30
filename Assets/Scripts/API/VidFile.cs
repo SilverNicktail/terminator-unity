@@ -182,7 +182,11 @@ namespace DaggerfallConnect.Arena2
             // Generally equivalent to (float)audioBuffer.Length / (float)sampleRate
             // Seems to differ mainly at beginning and end of video
             //frameDelay = ((float)(header.GlobalDelay + (float)lastDelay) * (float)delayMultiplier) / (float)sampleRate;
-            frameDelay = (double)audioBuffer.Length / (double)sampleRate;
+            if (audioBuffer == null) {
+                frameDelay = minFrameDelay;
+            } else {
+                frameDelay = (double)audioBuffer.Length / (double)sampleRate;
+            }
 
             // Daggerfall .VID files always have at least an audioBuffer.Length of 740 while in the middle of audio portions.
             // As the audio portion ends, this length can be much shorter, causing frameDelay to become very short
