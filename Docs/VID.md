@@ -1,5 +1,7 @@
 # Video Files (*.vid)
 
+[Daggerfall Unity Documentation](https://en.uesp.net/wiki/Daggerfall_Mod:VID_Files) (Contributed by me. 😉)
+
 Block-based video format containing audio and video block data to be displayed and synchronised, and an embedded
 palette, unlike with other image formats in the engine where palettes are usually externalised.
 
@@ -12,10 +14,6 @@ Future Shock contains only four fullscreen video files:
 
 Reading the code and doing some tests, these _initially_ seemed to follow the same format as in Daggerfall, but there
 appear to be some minor incompatibilities. 
-
-**Note:** `*.VID` files do not appear to be documented in the DFU wiki. As with `*.CFA` files, I will contribute this
-documentation back to the project and add a link here when I am confident. This initial doc is to note the differences/
-compatibility between Future Shcok and the DFU codebase.
 
 ## `LOGO.VID`
 
@@ -32,4 +30,7 @@ a video block, causing a parsing error when trying to calculate the applicable a
 the audio is simply stored out of sequence, or is stored externally. (Several files in the SFX archive seem like
 potential candidates.)
 
-After doing a quick update to `VidFile.cs` to use the minimum frame delay if the audio block is not present, I am able to play the videos silently. Naturally, they run too quickly, but this confirms that the video data is compatible. Tracking the blocks found in the file, I'm seeing a _lot_ of "null" blocks; a block type that Daggerfall Unity doesn't recognise? Need to do some manual investigation, both within the video files themselves and within the SFX archive.
+After doing a quick update to `VidFile.cs` to use the minimum frame delay if the audio block is not present, I am able 
+to play the videos silently. Naturally, they run too quickly, but this confirms that the video data is compatible. 
+Tracking the blocks found in the file, I'm seeing a _lot_ of "null" blocks; a block type that Daggerfall Unity doesn't 
+recognise? Need to do some manual investigation, both within the video files themselves and within the SFX archive.
