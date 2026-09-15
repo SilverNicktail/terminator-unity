@@ -32,5 +32,6 @@ potential candidates.)
 
 After doing a quick update to `VidFile.cs` to use the minimum frame delay if the audio block is not present, I am able 
 to play the videos silently. Naturally, they run too quickly, but this confirms that the video data is compatible. 
-Tracking the blocks found in the file, I'm seeing a _lot_ of "null" blocks; a block type that Daggerfall Unity doesn't 
-recognise? Need to do some manual investigation, both within the video files themselves and within the SFX archive.
+Logging out the block IDs in `START.VID` as they go through the renderer, there do not appear to be any audio blocks
+_or_ unknown blocks (IDs that don't exist in the existing codebase/Daggerfall docs). This would seem to confirm that
+the audio for these files is externalised somehow. Somewhere.
